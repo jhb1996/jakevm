@@ -20,6 +20,14 @@ def cross_correlation_2d(img, kernel):
         height and the number of color channels)
     '''
     # TODO-BLOCK-BEGIN
+    shape = np.shape(img)
+    print (shape)
+    grayscale = (len(shape)==2)
+    #if (grayscale):
+
+    	#get 
+    	#
+
     # TODO-BLOCK-END
 
 def convolve_2d(img, kernel):
@@ -35,6 +43,8 @@ def convolve_2d(img, kernel):
         Return an image of the same dimensions as the input image (same width,
         height and the number of color channels)
     '''
+    #np.dot
+
     # TODO-BLOCK-BEGIN
     # TODO-BLOCK-END
 
@@ -106,4 +116,49 @@ def create_hybrid_image(img1, img2, sigma1, size1, high_low1, sigma2, size2,
     hybrid_img = (img1 + img2)
     return (hybrid_img * 255).clip(0, 255).astype(np.uint8)
 
+#delete this. Development purposes only
+#what do I do about edges?
+def main(img, kernal):
+	imgShape = np.shape(img)
+	print imgShape
+	imgNumRows = imgShape[0] 
+	imgNumCols = imgShape[1] 
+	ccdMat = np.zeros(imgShape)
 
+	kerShape = np.shape(kernal)
+	kerNumRows = kerShape[0] 
+	kerNumCols = kerShape[1] 
+
+	#padded = np.array([[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,1,2,3,0,0],[0,0,4,5,6,7,0,0],[0,0,8,9,10,11,0,0],[0,0,11,12,13,14,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]])#np.zeros((imgNumRows+kerNumRows/2+2, imgNumCols+kerNumCols/2+2))
+	padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1))
+	padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1] = img
+	print (padded)
+	#x=padded[kerNumRows/2+1:imgNumRows-kerNumRows/2+2, kerNumCols:imgNumCols-kerNumCols/2+2]
+	#print x
+
+	grayscale = (len(imgShape)==2)
+	if (grayscale):
+		#r1 = 0
+		#r2 = 2
+		#c1 = 1
+		#c2 = 3
+		#loop in the x direction
+		for i in range (imgNumRows-kerNumRows+1): 
+			for j in range (imgNumCols-kerNumCols+1):
+				r1 = i
+				r2 = r1 + kerNumRows
+				c1 = j
+				c2 = j +kerNumCols
+				piece = img[r1:r2, c1:c2]
+				mtp = np.multiply(piece, kernal)
+				avrg = np.average(mtp)
+				print (i,j)
+				print ((r2+r1)/2,(c2+c1)/2)
+				print (avrg)
+				ccdMat[(r2+r1)/2][(c2+c1)/2] = avrg
+
+	print (ccdMat)
+if __name__ == "__main__":
+    img = np.array([[0,1,2,3],[4,5,6,7],[8,9,10,11],[11,12,13,14]])
+    kernal = np.array([[0,0,0],[0,0,0],[0,0,1]])
+    main(img, kernal)

@@ -21,26 +21,19 @@ def cross_correlation_2d(img, kernel):
     '''
 	# TODO-BLOCK-BEGIN
     imgShape = np.shape(img)
-	#print imgShape
     imgNumRows = imgShape[0] 
     imgNumCols = imgShape[1] 
-    ccdMat = np.zeros(imgShape)
     kerShape = np.shape(kernel)
     kerNumRows = kerShape[0] 
     kerNumCols = kerShape[1] 
-    #padded = np.array([[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,1,2,3,0,0],[0,0,4,5,6,7,0,0],[0,0,8,9,10,11,0,0],[0,0,11,12,13,14,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]])#np.zeros((imgNumRows+kerNumRows/2+2, imgNumCols+kerNumCols/2+2))
-    padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1))
-    padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1] = img
+    ccdMat = np.zeros(imgShape)
     #x=padded[kerNumRows/2+1:imgNumRows-kerNumRows/2+2, kerNumCols:imgNumCols-kerNumCols/2+2]
     #print x
     grayscale = (len(imgShape)==2)
     if (grayscale):
-    #r1 = 0
-    #r2 = 2
-    #c1 = 1
-    #c2 = 3
-    #loop in the x direction
-	    for i in range (imgNumRows):
+    	padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1))
+    	padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1] = img
+    	for i in range (imgNumRows):
 	    	for j in range (imgNumCols):
 	    		r1 = i+1
 	    		r2 = r1 + kerNumRows
@@ -50,7 +43,45 @@ def cross_correlation_2d(img, kernel):
 	    		mtp = np.multiply(piece, kernel)
 	    		sm = np.sum(mtp)
 	    		ccdMat[i][j] = sm
-	    return ccdMat
+	return ccdMat
+    else:
+    	padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1, 3))
+    	#print ("empty padded")
+    	#print (padded)
+    	padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1, :] = img
+    	#print ("full padded")
+    	#print padded
+    	#print ("end of full padded")
+    	k3D = np.zeros((kerNumRows,kerNumCols,3))
+    	k3D[:,:,0] = kernel
+    	k3D[:,:,1] = kernel
+    	k3D[:,:,2] = kernel
+    	print (kernel)
+    	for i in range (imgNumRows):
+	    	for j in range (imgNumCols):
+	    		r1 = i+1
+	    		r2 = r1 + kerNumRows
+	    		c1 = j+1
+	    		c2 = c1 + kerNumCols
+	    		piece = padded[r1:r2, c1:c2, :]
+	    		#print ("piece is")
+	    		#print (piece)
+	    		#print ("kernel is")
+	    		#print (k3D)
+	    		mtp = np.multiply(piece, k3D)
+	    		#print ("mtp is")
+	    		#print (mtp)
+	    		sm1 = np.sum(mtp, axis = 0)
+	    		sm2 = np.sum(sm1, axis = 0)
+	    		#print (i,j)
+	    		#print ("sm2")
+	    		#print (sm2)
+	    		#sm2 = np.sum(sm, axis = 0)
+
+	    		ccdMat[i][j] = sm2
+    	#print ("returning is")
+    	return ccdMat
+
     # TODO-BLOCK-END
 
 def convolve_2d(img, kernel):
@@ -88,7 +119,7 @@ def gaussian_blur_kernel_2d(sigma, width, height):
         with an image results in a Gaussian-blurred image.
     '''
     # TODO-BLOCK-BEGIN
-
+    # asked a TA
     gaus_mat = np.zeros((width,height))
     #print (gaus_mat)
     for i in range (width):
@@ -116,7 +147,7 @@ def low_pass(img, sigma, size):
     '''
     # TODO-BLOCK-BEGIN
     #TODO: WHat is the difference beteen low and high pass implementation
-    gaus_mat = gaussian_blur_kernel_2d(sigma,size)
+    gaus_mat = gaussian_blur_kernel_2d(sigma,size,size)
     filtered = cross_correlation_2d(img, gaus_mat)
     return filtered
     # TODO-BLOCK-END
@@ -165,17 +196,26 @@ def create_hybrid_image(img1, img2, sigma1, size1, high_low1, sigma2, size2,
 #what do I do about edges?
 
 	#print (ccdMat)
-if __name__ == "__main__":
-    img = np.array([[0,1,2,3],[4,5,6,7],[8,9,10,11],[11,12,13,14]])
-    #kernal = np.array([[1,1,1],[1,1,1],[1,1,1]])
-    kernel = np.array([[0,0,0],[0,0,0],[1,0,0]])
+# if __name__ == "__main__":
+#     #img = np.array([[0,1,2,3],[4,5,6,7],[8,9,10,11],[11,12,13,14]])
+#     #kernal = np.array([[1,1,1],[1,1,1],[1,1,1]])
+#     img = np.array([[[1,10,100],[1,10,100],[1,10,100]],[[1,10,100],[1,10,100],[1,10,100]],[[1,10,100],[1,10,100],[1,10,100]]])
+#     kernel = np.array([[1,0,0,],[0,0,0],[0,0,0]])
+#     #kernel = np.array([[2]])
 
-    #kernal = np.array([[0,0,0],[0,0,0],[0,0,1]])
-    #main(img, kernel)
-    #print(cross_correlation_2d(img, kernel))
-    #print(convolve_2d(img, kernel))
-    sigma = 1
-    width = 5
-    height = 3
-    print(gaussian_blur_kernel_2d(sigma, width, height))
-    print (np.random.normal(loc=1.0, scale=1.0, size=(height,width)))
+#     #kernal = np.array([[0,0,0],[0,0,0],[0,0,1]])
+#     #main(img, kernel)
+#     #print(cross_correlation_2d(img, kernel))
+#     #print(convolve_2d(img, kernel))
+#     sigma = 1
+#     width = 5
+#     height = 3
+#     #print(cross_correlation_2d(img, kernel))
+#     #print (np.shape(kernel))    	
+
+
+
+
+
+    #print(gaussian_blur_kernel_2d(sigma, width, height))
+    #print (np.random.normal(loc=1.0, scale=1.0, size=(height,width)))

@@ -19,15 +19,38 @@ def cross_correlation_2d(img, kernel):
         Return an image of the same dimensions as the input image (same width,
         height and the number of color channels)
     '''
-    # TODO-BLOCK-BEGIN
-    shape = np.shape(img)
-    print (shape)
-    grayscale = (len(shape)==2)
-    #if (grayscale):
-
-    	#get 
-    	#
-
+	# TODO-BLOCK-BEGIN
+    imgShape = np.shape(img)
+	#print imgShape
+    imgNumRows = imgShape[0] 
+    imgNumCols = imgShape[1] 
+    ccdMat = np.zeros(imgShape)
+    kerShape = np.shape(kernel)
+    kerNumRows = kerShape[0] 
+    kerNumCols = kerShape[1] 
+    #padded = np.array([[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,1,2,3,0,0],[0,0,4,5,6,7,0,0],[0,0,8,9,10,11,0,0],[0,0,11,12,13,14,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]])#np.zeros((imgNumRows+kerNumRows/2+2, imgNumCols+kerNumCols/2+2))
+    padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1))
+    padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1] = img
+    #x=padded[kerNumRows/2+1:imgNumRows-kerNumRows/2+2, kerNumCols:imgNumCols-kerNumCols/2+2]
+    #print x
+    grayscale = (len(imgShape)==2)
+    if (grayscale):
+    #r1 = 0
+    #r2 = 2
+    #c1 = 1
+    #c2 = 3
+    #loop in the x direction
+	    for i in range (imgNumRows):
+	    	for j in range (imgNumCols):
+	    		r1 = i+1
+	    		r2 = r1 + kerNumRows
+	    		c1 = j+1
+	    		c2 = c1 + kerNumCols
+	    		piece = padded[r1:r2, c1:c2]
+	    		mtp = np.multiply(piece, kernel)
+	    		sm = np.sum(mtp)
+	    		ccdMat[i][j] = sm
+	    return ccdMat
     # TODO-BLOCK-END
 
 def convolve_2d(img, kernel):
@@ -43,8 +66,9 @@ def convolve_2d(img, kernel):
         Return an image of the same dimensions as the input image (same width,
         height and the number of color channels)
     '''
-    #np.dot
-
+    kernel = np.flipud(np.fliplr(kernel))
+    #print(kernel)
+    return cross_correlation_2d(img, kernel)
     # TODO-BLOCK-BEGIN
     # TODO-BLOCK-END
 
@@ -64,6 +88,21 @@ def gaussian_blur_kernel_2d(sigma, width, height):
         with an image results in a Gaussian-blurred image.
     '''
     # TODO-BLOCK-BEGIN
+
+    gaus_mat = np.zeros((width,height))
+    #print (gaus_mat)
+    for i in range (width):
+    	for j in range (height):
+    		#TODO: what to do for even values
+    		y = i -(width/2)
+    		x = j -(height/2)
+    		#print (i,j)
+    		#print (y,x)
+    		gaus_mat[i][j] = (2.71828)**((-1*(((x)**2)+((y)**2)))/(2.*((float(sigma))**2))) #why does math.e not work
+    		#print (gaus_mat[i][j])
+
+    #print (gaus_mat)
+    return gaus_mat/(np.sum(gaus_mat))
     # TODO-BLOCK-END
 
 def low_pass(img, sigma, size):
@@ -76,6 +115,10 @@ def low_pass(img, sigma, size):
         height and the number of color channels)
     '''
     # TODO-BLOCK-BEGIN
+    #TODO: WHat is the difference beteen low and high pass implementation
+    gaus_mat = gaussian_blur_kernel_2d(sigma,size)
+    filtered = cross_correlation_2d(img, gaus_mat)
+    return filtered
     # TODO-BLOCK-END
 
 def high_pass(img, sigma, size):
@@ -87,7 +130,9 @@ def high_pass(img, sigma, size):
         Return an image of the same dimensions as the input image (same width,
         height and the number of color channels)
     '''
+    
     # TODO-BLOCK-BEGIN
+    return img-low_pass(img, sigma, size)
     # TODO-BLOCK-END
 
 def create_hybrid_image(img1, img2, sigma1, size1, high_low1, sigma2, size2,
@@ -118,47 +163,19 @@ def create_hybrid_image(img1, img2, sigma1, size1, high_low1, sigma2, size2,
 
 #delete this. Development purposes only
 #what do I do about edges?
-def main(img, kernal):
-	imgShape = np.shape(img)
-	print imgShape
-	imgNumRows = imgShape[0] 
-	imgNumCols = imgShape[1] 
-	ccdMat = np.zeros(imgShape)
 
-	kerShape = np.shape(kernal)
-	kerNumRows = kerShape[0] 
-	kerNumCols = kerShape[1] 
-
-	#padded = np.array([[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,1,2,3,0,0],[0,0,4,5,6,7,0,0],[0,0,8,9,10,11,0,0],[0,0,11,12,13,14,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]])#np.zeros((imgNumRows+kerNumRows/2+2, imgNumCols+kerNumCols/2+2))
-	padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1))
-	padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1] = img
-	print (padded)
-	#x=padded[kerNumRows/2+1:imgNumRows-kerNumRows/2+2, kerNumCols:imgNumCols-kerNumCols/2+2]
-	#print x
-
-	grayscale = (len(imgShape)==2)
-	if (grayscale):
-		#r1 = 0
-		#r2 = 2
-		#c1 = 1
-		#c2 = 3
-		#loop in the x direction
-		for i in range (imgNumRows-kerNumRows+1): 
-			for j in range (imgNumCols-kerNumCols+1):
-				r1 = i
-				r2 = r1 + kerNumRows
-				c1 = j
-				c2 = j +kerNumCols
-				piece = img[r1:r2, c1:c2]
-				mtp = np.multiply(piece, kernal)
-				avrg = np.average(mtp)
-				print (i,j)
-				print ((r2+r1)/2,(c2+c1)/2)
-				print (avrg)
-				ccdMat[(r2+r1)/2][(c2+c1)/2] = avrg
-
-	print (ccdMat)
+	#print (ccdMat)
 if __name__ == "__main__":
     img = np.array([[0,1,2,3],[4,5,6,7],[8,9,10,11],[11,12,13,14]])
-    kernal = np.array([[0,0,0],[0,0,0],[0,0,1]])
-    main(img, kernal)
+    #kernal = np.array([[1,1,1],[1,1,1],[1,1,1]])
+    kernel = np.array([[0,0,0],[0,0,0],[1,0,0]])
+
+    #kernal = np.array([[0,0,0],[0,0,0],[0,0,1]])
+    #main(img, kernel)
+    #print(cross_correlation_2d(img, kernel))
+    #print(convolve_2d(img, kernel))
+    sigma = 1
+    width = 5
+    height = 3
+    print(gaussian_blur_kernel_2d(sigma, width, height))
+    print (np.random.normal(loc=1.0, scale=1.0, size=(height,width)))

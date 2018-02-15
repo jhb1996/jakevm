@@ -104,8 +104,8 @@ def gaussian_blur_kernel_2d(sigma, width, height):
     gaus_mat = np.zeros((width,height))
     for i in range (width):
     	for j in range (height):
-    		y = i -(width/2)
-    		x = j -(height/2)
+    		y = i -(width/2.)+.5
+    		x = j -(height/2.)+.5
     		gaus_mat[i][j] = (2.71828)**((-1*(((x)**2)+((y)**2)))/(2.*((float(sigma))**2))) #why does math.e not work
 
     return gaus_mat/(np.sum(gaus_mat))
@@ -165,4 +165,3 @@ def create_hybrid_image(img1, img2, sigma1, size1, high_low1, sigma2, size2,
     img2 *= 2 * mixin_ratio
     hybrid_img = (img1 + img2)
     return (hybrid_img * 255).clip(0, 255).astype(np.uint8)
-

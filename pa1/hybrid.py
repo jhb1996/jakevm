@@ -27,8 +27,6 @@ def cross_correlation_2d(img, kernel):
     kerNumRows = kerShape[0] 
     kerNumCols = kerShape[1] 
     ccdMat = np.zeros(imgShape)
-    #x=padded[kerNumRows/2+1:imgNumRows-kerNumRows/2+2, kerNumCols:imgNumCols-kerNumCols/2+2]
-    #print x
     grayscale = (len(imgShape)==2)
     if (grayscale):
     	padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1))
@@ -46,13 +44,10 @@ def cross_correlation_2d(img, kernel):
 	return ccdMat
     else:
     	padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1, 3))
-    	#print ("empty padded")
-    	#print (padded)
+
     	padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1, :] = img
-    	#print ("full padded")
-    	#print padded
-    	#print ("end of full padded")
-    	k3D = np.zeros((kerNumRows,kerNumCols,3))
+    	#extend the kernal into (wxhx3)
+        k3D = np.zeros((kerNumRows,kerNumCols,3))
     	k3D[:,:,0] = kernel
     	k3D[:,:,1] = kernel
     	k3D[:,:,2] = kernel
@@ -63,22 +58,10 @@ def cross_correlation_2d(img, kernel):
 	    		c1 = j+1
 	    		c2 = c1 + kerNumCols
 	    		piece = padded[r1:r2, c1:c2, :]
-	    		#print ("piece is")
-	    		#print (piece)
-	    		#print ("kernel is")
-	    		#print (k3D)
 	    		mtp = np.multiply(piece, k3D)
-	    		#print ("mtp is")
-	    		#print (mtp)
 	    		sm1 = np.sum(mtp, axis = 0)
 	    		sm2 = np.sum(sm1, axis = 0)
-	    		#print (i,j)
-	    		#print ("sm2")
-	    		#print (sm2)
-	    		#sm2 = np.sum(sm, axis = 0)
-
 	    		ccdMat[i][j] = sm2
-    	#print ("returning is")
     	return ccdMat
 
     # TODO-BLOCK-END
@@ -96,10 +79,9 @@ def convolve_2d(img, kernel):
         Return an image of the same dimensions as the input image (same width,
         height and the number of color channels)
     '''
-    kernel = np.flipud(np.fliplr(kernel))
-    #print(kernel)
-    return cross_correlation_2d(img, kernel)
     # TODO-BLOCK-BEGIN
+    kernel = np.flipud(np.fliplr(kernel)) #flip it once in either direction
+    return cross_correlation_2d(img, kernel)
     # TODO-BLOCK-END
 
 def gaussian_blur_kernel_2d(sigma, width, height):
@@ -118,20 +100,14 @@ def gaussian_blur_kernel_2d(sigma, width, height):
         with an image results in a Gaussian-blurred image.
     '''
     # TODO-BLOCK-BEGIN
-    # asked a TA
+    # asked a TA and he said I do not need to be able to handle even gaussians
     gaus_mat = np.zeros((width,height))
-    #print (gaus_mat)
     for i in range (width):
     	for j in range (height):
-    		#TODO: what to do for even values
     		y = i -(width/2)
     		x = j -(height/2)
-    		#print (i,j)
-    		#print (y,x)
     		gaus_mat[i][j] = (2.71828)**((-1*(((x)**2)+((y)**2)))/(2.*((float(sigma))**2))) #why does math.e not work
-    		#print (gaus_mat[i][j])
 
-    #print (gaus_mat)
     return gaus_mat/(np.sum(gaus_mat))
     # TODO-BLOCK-END
 
@@ -145,7 +121,6 @@ def low_pass(img, sigma, size):
         height and the number of color channels)
     '''
     # TODO-BLOCK-BEGIN
-    #TODO: WHat is the difference beteen low and high pass implementation
     gaus_mat = gaussian_blur_kernel_2d(sigma,size,size)
     filtered = cross_correlation_2d(img, gaus_mat)
     return filtered
@@ -191,30 +166,3 @@ def create_hybrid_image(img1, img2, sigma1, size1, high_low1, sigma2, size2,
     hybrid_img = (img1 + img2)
     return (hybrid_img * 255).clip(0, 255).astype(np.uint8)
 
-#delete this. Development purposes only
-#what do I do about edges?
-
-	#print (ccdMat)
-# if __name__ == "__main__":
-#     #img = np.array([[0,1,2,3],[4,5,6,7],[8,9,10,11],[11,12,13,14]])
-#     #kernal = np.array([[1,1,1],[1,1,1],[1,1,1]])
-#     img = np.array([[[1,10,100],[1,10,100],[1,10,100]],[[1,10,100],[1,10,100],[1,10,100]],[[1,10,100],[1,10,100],[1,10,100]]])
-#     kernel = np.array([[1,0,0,],[0,0,0],[0,0,0]])
-#     #kernel = np.array([[2]])
-
-#     #kernal = np.array([[0,0,0],[0,0,0],[0,0,1]])
-#     #main(img, kernel)
-#     #print(cross_correlation_2d(img, kernel))
-#     #print(convolve_2d(img, kernel))
-#     sigma = 1
-#     width = 5
-#     height = 3
-#     #print(cross_correlation_2d(img, kernel))
-#     #print (np.shape(kernel))    	
-
-
-
-
-
-    #print(gaussian_blur_kernel_2d(sigma, width, height))
-    #print (np.random.normal(loc=1.0, scale=1.0, size=(height,width)))

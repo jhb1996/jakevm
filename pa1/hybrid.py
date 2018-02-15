@@ -56,7 +56,6 @@ def cross_correlation_2d(img, kernel):
     	k3D[:,:,0] = kernel
     	k3D[:,:,1] = kernel
     	k3D[:,:,2] = kernel
-    	print (kernel)
     	for i in range (imgNumRows):
 	    	for j in range (imgNumCols):
 	    		r1 = i+1

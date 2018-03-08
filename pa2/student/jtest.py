@@ -56,7 +56,7 @@ if __name__ == "__main__":
     #print (takeGradientMag(imageForGradient))
     
     cvImage = np.array([[[100,200,200],[0,200,200],[0,0,0]],[[200,290,200],[200,200,200],[200,200,200]],[[100,90,100],[100,100,100],[100,100,100]]])
-    cvImage2 = np.array([[[100,90,100],[1,190,190]],[[100,100,100],[100,100,100]]])
+    cvImage2 = np.array([[100,90,100],[100,100,100]])
 
     
     W = getColorWeights(cvImage2, 10, sigmaF=1, sigmaX=1)

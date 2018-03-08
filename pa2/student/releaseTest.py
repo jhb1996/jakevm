@@ -45,10 +45,10 @@ class TestSegment(unittest.TestCase):
     #     res_out = segment.getTotalNodeWeights(W)
     #     self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
     # 
-    def test_ncut_color_weight(self):
-        img, r, exp_out = self.data['C']['imgs'], self.data['C']['rs'], self.data['C']['Ws']
-        res_out = segment.getColorWeights(img, r)
-        self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
+    # def test_ncut_color_weight(self):
+    #     img, r, exp_out = self.data['C']['imgs'], self.data['C']['rs'], self.data['C']['Ws']
+    #     res_out = segment.getColorWeights(img, r)
+    #     self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
     
     def test_ncut_approx_norm_bisect(self):
         W, d, exp_out = self.data['C']['Ws'], self.data['C']['ds'], self.data['C']['ys']

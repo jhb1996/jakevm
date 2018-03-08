@@ -537,24 +537,23 @@ def nCutSegmentation(cvImage, sigmaF=5, sigmaX=6):
     y = approxNormalizedBisect(W, d)
     print("Reconstructing segments")
     segments = reconstructNCutSegments(cvImage, y, 0)
-    print(segments)
-    return segments
+    return segments.astype(int)
 
-def printa(nparray):
-    def genspaces(num):
-        spaces = ""
-        for i in range(num):
-            spaces += " "
-        return spaces
-    m,n = np.shape(nparray)
-    # print ("[", end='')
-    for i in range(m):
-        # print ("[", end='')
-        for j in range (n):
-            # print((nparray[i][j]+", "+genspaces(7-len(str(nparray[i][j]))),end='')
-        # if i==m-1:
-            # print ("]", end ='')
-            print ("]")
+# def printa(nparray):
+#     def genspaces(num):
+#         spaces = ""
+#         for i in range(num):
+#             spaces += " "
+#         return spaces
+#     m,n = np.shape(nparray)
+#     # print ("[", end='')
+#     for i in range(m):
+#         # print ("[", end='')
+#         for j in range (n):
+#             # print((nparray[i][j]+", "+genspaces(7-len(str(nparray[i][j]))),end='')
+#         # if i==m-1:
+#             # print ("]", end ='')
+#             print ("]")
 # if __name__ == "__main__":
 #     cvImage = np.array([[10,11,12],[13,14,15],[16,17,18]])
 #     minIn = 10

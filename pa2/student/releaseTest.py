@@ -22,16 +22,22 @@ class TestSegment(unittest.TestCase):
     #     self.assertTrue(np.allclose(exp_out, student_out, atol=EPSILON))
     # 
     def test_grad(self):
-        img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
-        xgrad, ygrad, maggrad = segment.takeXGradient(img),segment.takeYGradient(img),\
-                segment.takeGradientMag(img)
-        print(img)
-        print (xgrad_exp)
-        print (xgrad)
-        self.assertTrue(np.allclose(xgrad_exp, xgrad, atol=EPSILON))
+        # img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
+        # xgrad, ygrad, maggrad = segment.takeXGradient(img),segment.takeYGradient(img),\
+        #         segment.takeGradientMag(img)
+        # self.assertTrue(np.allclose(xgrad_exp, xgrad, atol=EPSILON))
         #self.assertTrue(np.allclose(ygrad_exp, ygrad, atol=EPSILON))
         #self.assertTrue(np.allclose(maggrad_exp, maggrad, atol=EPSILON))
-    # 
+        
+        img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
+        xgrad = segment.takeXGradient(img)#,segment.takeYGradient(img),\
+        
+        print (xgrad[0])
+        print (xgrad_exp[0])
+                #segment.takeGradientMag(img)
+        self.assertTrue(np.allclose(xgrad_exp, xgrad, atol=EPSILON))
+    
+    
     # def test_kmeans_solve(self):
     #     centers, k, img, exp_niter = self.data['B_ksolver']
     #     exp_labels = img[:,-1]

@@ -59,7 +59,7 @@ class TestSegment(unittest.TestCase):
         print (np.shape(exp_out))
         for i in range (15):
             for j in range (7):
-                if (res_out[i] == exp_out[i]):
+                if (res_out[i][j] == exp_out[i][j]):
                     print i
                     print (j)
                     print (res_out[i])

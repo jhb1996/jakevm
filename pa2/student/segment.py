@@ -407,6 +407,7 @@ def approxNormalizedBisect(W, d):
     #compute y = D**(-1/2)*z
     w,v = scipy.linalg.eigh(L)
     #print(w)
+    print (v)
     y=v[:,0]
     return y
 

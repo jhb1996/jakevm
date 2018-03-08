@@ -53,8 +53,9 @@ class TestSegment(unittest.TestCase):
     def test_ncut_approx_norm_bisect(self):
         W, d, exp_out = self.data['C']['Ws'], self.data['C']['ds'], self.data['C']['ys']
         res_out = segment.approxNormalizedBisect(W,d)
+        print ("res is")
         print (res_out)
-        print("--------------------------------------------")
+        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         print (exp_out)
         print("=============================================")

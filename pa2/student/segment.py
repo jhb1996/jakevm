@@ -414,7 +414,7 @@ def approxNormalizedBisect(W, d):
     #print ("v is")
     #print (v)
     #y=v[:,0]
-    d_inverse = np.inverse(d)
+    d_inverse = np.reciprocal(d)
     #np.
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     return np.matmult(d_inverse, np.transpose(y))

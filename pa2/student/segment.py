@@ -407,17 +407,17 @@ def approxNormalizedBisect(W, d):
     #find the second smallest eigenvector z
     #compute y = D**(-1/2)*z
     w,v = scipy.linalg.eigh(L)
-    print("w is")
-    print(w)
+    #print("w is")
+    #print(w)
     argsorted = np.argsort(w)
     y=v[:,argsorted[1]]
     #print ("v is")
     #print (v)
     #y=v[:,0]
-    #d_inverse = np.inverse(d)
+    d_inverse = np.inverse(d)
     #np.
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    return y
+    return np.matmult(d_inverse, np.transpose(y))
 
 # TODO:PA2 Fill in this function
 def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):

@@ -58,7 +58,7 @@ class TestSegment(unittest.TestCase):
         print (np.shape(res_out))
         print (np.shape(exp_out))
         for i in range (15):
-            if res_out[i] != exp_out[i]:
+            if not np.all(res_out[i], exp_out[i]):
                 print i
                 print (res_out[i])
                 print (exp_out[i])

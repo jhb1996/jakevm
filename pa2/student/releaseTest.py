@@ -58,10 +58,12 @@ class TestSegment(unittest.TestCase):
         print (np.shape(res_out))
         print (np.shape(exp_out))
         for i in range (15):
-            if not np.all(res_out[i], exp_out[i]):
-                print i
-                print (res_out[i])
-                print (exp_out[i])
+            for j in range (7):
+                if (res_out[i] == exp_out[i]):
+                    print i
+                    print (j)
+                    print (res_out[i])
+                    print (exp_out[i])
         self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
 
 if __name__ == '__main__':

@@ -390,36 +390,16 @@ def approxNormalizedBisect(W, d):
     Return:
         y_1 - the second smallest eigenvector of D-W
     """
-    #construct I-D**(-1/2)*W*D**(-1/2)
     m_n = len(d)
-    I = np.identity(m_n)#scipy.sparse.identity(m_n)
-    #d_diag = np.zeros((m_n,m_n))
-    #print(d)
+    I = np.identity(m_n)
     d_sqrt =  np.sqrt(d)
     neg_sqrt_d = np.reciprocal(d_sqrt)
     neg_sqrt_d_diag = np.diag(neg_sqrt_d)#spdiags(neg_sqrt_d ,0,m_n,m_n)
-    #L = I-neg_sqrt_d_diag * W * neg_sqrt_d_diag
     L = I-np.dot(np.dot((neg_sqrt_d_diag),W), neg_sqrt_d_diag)
-
-    #L = I-scipy.sparse.csr_matrix.dot(scipy.sparse.csr_matrix.dot(neg_sqrt_d_diag, W), neg_sqrt_d_diag)
-    #L = I-np.matmul(np.matmul(D_neg_1_half, W), D_neg_1_half)
-
-    #find the second smallest eigenvector z
-    #compute y = D**(-1/2)*z
     w,v = scipy.linalg.eigh(L)
-    #print("w is")
-    #print(w)
     argsorted = np.argsort(w)
     z=v[:,argsorted[1]]
-    #print ("v is")
-    #print (v)
-    #y=v[:,0]
     d_inverse = np.reciprocal(d)
-    #np.
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(np.shape(d_inverse))
-    print(np.shape(z))
-
     return np.dot(neg_sqrt_d_diag, np.transpose(z))
 
 # TODO:PA2 Fill in this function
@@ -458,7 +438,6 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                 c_exponent = (-1*np.linalg.norm(c_ij-cvImage[l][k]))/sigmaFsq
                 entry   = np.exp(x_exponent)*np.exp(c_exponent)
                 w[i][j] = entry
-                #w[]
     return w       
     # for i in range(m):
     #     for j in range(n):

@@ -417,7 +417,7 @@ def approxNormalizedBisect(W, d):
     d_inverse = np.reciprocal(d)
     #np.
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    return np.matmult(d_inverse, np.transpose(y))
+    return np.matmul(d_inverse, np.transpose(y))
 
 # TODO:PA2 Fill in this function
 def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):

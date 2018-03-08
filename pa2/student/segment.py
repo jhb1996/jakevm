@@ -93,7 +93,7 @@ def takeXGradient(cvImage):
         xGrad - the derivative of cvImage at each position w.r.t. the x axis.
     
     '''
-    cvImage32 = cvImage.astype("float32")
+    cvImage32 = cvImage.astype(np.float32)
     filter1 = np.array([[1], [2], [1]])
     filter2 = np.array([[1, 0, -1]])
     shape = np.shape(cvImage32)
@@ -104,7 +104,11 @@ def takeXGradient(cvImage):
         return conv2
     else:#color image
         #convolve each channel seperately
-        b,g,r = cv2.split(cvImage32)        
+        print("rgb is running----------------------------------------------")
+        b,g,r = cv2.split(cvImage32)
+        #b =
+        #g
+        #r
         conv1_b = convolve2d(b,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_b = convolve2d(conv1_b, filter2, mode='same', boundary='fill', fillvalue=0)
         conv1_g = convolve2d(g,       filter1, mode='same', boundary='fill', fillvalue=0)

@@ -25,6 +25,7 @@ class TestSegment(unittest.TestCase):
         img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
         xgrad, ygrad, maggrad = segment.takeXGradient(img),segment.takeYGradient(img),\
                 segment.takeGradientMag(img)
+        print(img)
         print (xgrad_exp)
         print (xgrad)
         self.assertTrue(np.allclose(xgrad_exp, xgrad, atol=EPSILON))

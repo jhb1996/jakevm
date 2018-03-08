@@ -503,11 +503,13 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
                          and blue otherwise.
     """
     bools = y>0
-    
+    print ("shape y: ",np.shape(y))
     m,n,c = np.shape(cvImage)
+    print ("shape cv image: ", m,n,c)
     new = np.zeros((m,n,c))
     for i in range(m):
         for j in range(n):
+            print((i*m)+j)
             if bools[(i*m)+j]==True:
                 new[i][j] = [0,255,255] #try: im2[np.where((y>0).all(axis = 2))] = [0,255,255]
             else:

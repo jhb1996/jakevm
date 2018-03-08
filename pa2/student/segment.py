@@ -449,7 +449,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                         x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
                     i_j_row.append(x_exponent)
             print(len(i_j_row))
-            dist_exponent_mat[(i*m)+j] = i_j_row #fill the entire row for pixel i,m
+            dist_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,m
     #print(dist_exponent_mat)
     if len(shape) == 2:
         for i in range(m):
@@ -462,7 +462,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                     for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
                         c_exponent  =  ((-1*math.sqrt((c_ij-cvImage[k][l])**2)))/sigmaFsq #distance between all j,k and i
                         i_j_row.append(c_exponent)
-                c_exponent_mat[(i*m)+j] = i_j_row #fill the entire row for pixel i,j
+                c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
     else:#colored image
         b,g,r = cv2.split(cvImage)
         for i in range(m):
@@ -475,7 +475,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                     for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
                         c_exponent  =  (-1*np.linalg.norm(c_ij-cvImage[k][l]))/sigmaFsq #distance between all j,k and i
                         i_j_row.append(c_exponent)
-                c_exponent_mat[(i*m)+j] = i_j_row #fill the entire row for pixel i,j
+                c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
     
     es_to_the_c_terms = np.exp(c_exponent_mat)
     es_to_the_x_terms = np.exp(dist_exponent_mat)
@@ -503,13 +503,10 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
                          and blue otherwise.
     """
     bools = y>0
-    print ("shape y: ",np.shape(y))
     m,n,c = np.shape(cvImage)
-    print ("shape cv image: ", m,n,c)
     new = np.zeros((m,n,c))
     for i in range(m):
         for j in range(n):
-            print((i*n)+j)
             if bools[(i*n)+j]==True:
                 new[i][j] = [0,255,255] #try: im2[np.where((y>0).all(axis = 2))] = [0,255,255]
             else:

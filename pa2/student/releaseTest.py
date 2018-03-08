@@ -57,8 +57,11 @@ class TestSegment(unittest.TestCase):
         res_out = segment.reconstructNCutSegments(img, y)
         print (np.shape(res_out))
         print (np.shape(exp_out))
-        print (res_out[0])
-        print (exp_out[0])
+        for i in range (15):
+            if res_out[i] != exp_out[i]:
+                print i
+                print (res_out[i])
+                print (exp_out[i])
         self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
 
 if __name__ == '__main__':

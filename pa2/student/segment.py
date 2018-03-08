@@ -397,8 +397,8 @@ def approxNormalizedBisect(W, d):
     #print(d)
     d_sqrt =  np.sqrt(d)
     neg_sqrt_d = np.reciprocal(d_sqrt)
-    #neg_sqrt_d_diag = spdiags(neg_sqrt_d ,0,m_n,m_n)
-    L = I-np.matmul(np.matmul(W,np.tranpose(D_neg_1_half)), D_neg_1_half)
+    neg_sqrt_d_diag = np.diag(d)#spdiags(neg_sqrt_d ,0,m_n,m_n)
+    L = I-np.matmul(np.matmul((D_neg_1_half),W), D_neg_1_half)
 
     #L = I-scipy.sparse.csr_matrix.dot(scipy.sparse.csr_matrix.dot(neg_sqrt_d_diag, W), neg_sqrt_d_diag)
     #L = I-np.matmul(np.matmul(D_neg_1_half, W), D_neg_1_half)
@@ -451,7 +451,6 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                     else:
                         x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
                     i_j_row.append(x_exponent)
-            print(len(i_j_row))
             dist_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,m
     #print(dist_exponent_mat)
     if len(shape) == 2:
@@ -467,7 +466,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                         i_j_row.append(c_exponent)
                 c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
     else:#colored image
-        b,g,r = cv2.split(cvImage)
+        #b,g,r = cv2.split(cvImage)
         for i in range(m):
             for j in range(n):
                 #l = i%m

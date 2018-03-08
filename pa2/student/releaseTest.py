@@ -56,10 +56,10 @@ class TestSegment(unittest.TestCase):
         print ("res is")
         print (res_out)
         print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-
+    
         print (exp_out)
         print("=============================================")
-
+    
         self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
     
     # def test_ncut_reconstruct(self):

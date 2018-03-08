@@ -21,16 +21,16 @@ class TestSegment(unittest.TestCase):
     #     student_out = segment.normalizeImage(img, *params)
     #     self.assertTrue(np.allclose(exp_out, student_out, atol=EPSILON))
     # 
-    # def test_grad(self):
-    #     img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
-    #     xgrad, ygrad, maggrad = segment.takeXGradient(img),segment.takeYGradient(img),\
-    #             segment.takeGradientMag(img)
-    #     print(img)
-    #     print (xgrad_exp)
-    #     print (xgrad)
-    #     self.assertTrue(np.allclose(xgrad_exp, xgrad, atol=EPSILON))
-    #     #self.assertTrue(np.allclose(ygrad_exp, ygrad, atol=EPSILON))
-    #     #self.assertTrue(np.allclose(maggrad_exp, maggrad, atol=EPSILON))
+    def test_grad(self):
+        img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
+        xgrad, ygrad, maggrad = segment.takeXGradient(img),segment.takeYGradient(img),\
+                segment.takeGradientMag(img)
+        # print(img)
+        # print (xgrad_exp)
+        # print (xgrad)
+        self.assertTrue(np.allclose(xgrad_exp, xgrad, atol=EPSILON))
+        #self.assertTrue(np.allclose(ygrad_exp, ygrad, atol=EPSILON))
+        #self.assertTrue(np.allclose(maggrad_exp, maggrad, atol=EPSILON))
     # 
     # def test_kmeans_solve(self):
     #     centers, k, img, exp_niter = self.data['B_ksolver']
@@ -45,15 +45,15 @@ class TestSegment(unittest.TestCase):
     #     res_out = segment.getTotalNodeWeights(W)
     #     self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
     # 
-    def test_ncut_color_weight(self):
-        img, r, exp_out = self.data['C']['imgs'], self.data['C']['rs'], self.data['C']['Ws']
-        res_out = segment.getColorWeights(img, r)
-        self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
-    
-    def test_ncut_approx_norm_bisect(self):
-        W, d, exp_out = self.data['C']['Ws'], self.data['C']['ds'], self.data['C']['ys']
-        res_out = segment.approxNormalizedBisect(W,d)
-        self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
+    # def test_ncut_color_weight(self):
+    #     img, r, exp_out = self.data['C']['imgs'], self.data['C']['rs'], self.data['C']['Ws']
+    #     res_out = segment.getColorWeights(img, r)
+    #     self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
+    # 
+    # def test_ncut_approx_norm_bisect(self):
+    #     W, d, exp_out = self.data['C']['Ws'], self.data['C']['ds'], self.data['C']['ys']
+    #     res_out = segment.approxNormalizedBisect(W,d)
+    #     self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
     
     # def test_ncut_reconstruct(self):
     #     img, y, exp_out = self.data['C']['imgs'], self.data['C']['ys'], self.data['C']['outs']

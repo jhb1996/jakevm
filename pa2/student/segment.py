@@ -509,8 +509,8 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
     new = np.zeros((m,n,c))
     for i in range(m):
         for j in range(n):
-            print((i*m)+j)
-            if bools[(i*m)+j]==True:
+            print((i*n)+j)
+            if bools[(i*n)+j]==True:
                 new[i][j] = [0,255,255] #try: im2[np.where((y>0).all(axis = 2))] = [0,255,255]
             else:
                 new[i][j] = [0,255,0]

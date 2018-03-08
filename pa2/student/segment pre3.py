@@ -35,23 +35,13 @@ def normalizeImage(cvImage, minIn, maxIn, minOut, maxOut):
     Return:
     renormalized - the linearly rescaled version of cvImage.
     '''
-    shape = np.shape(cvImage)
-    if len(shape)==2:     
-        m,n = np.shape(cvImage)
-        new = np.zeros((m,n))
-        for i in range(m):
-            for j in range(n):
-                new[i][j]= (((((float(cvImage[i][j])-minIn)/float(maxIn-minIn)))*float(maxOut-minOut))+minOut)
-        return new
-    else:#color image
-        m,n,_ = np.shape(cvImage)
-        new = np.zeros((m,n,3))
-        for i in range(m):
-            for j in range(n):
-                new[i][j][0]= (((((float(cvImage[i][j][0])-minIn)/float(maxIn-minIn)))*float(maxOut-minOut))+minOut)
-                new[i][j][1]= (((((float(cvImage[i][j][1])-minIn)/float(maxIn-minIn)))*float(maxOut-minOut))+minOut)
-                new[i][j][2]= (((((float(cvImage[i][j][2])-minIn)/float(maxIn-minIn)))*float(maxOut-minOut))+minOut)
-        return new
+    m,n = np.shape(cvImage)
+    new = np.zeros((m,n))
+    for i in range(m):
+        for j in range(n):
+            new[i][j]= (((((float(cvImage[i][j])-minIn)/float(maxIn-minIn)))*float(maxOut-minOut))+minOut)
+    return new
+
 # TODO:PA2 Fill in this function
 def getDisplayGradient(gradientImage):
     """
@@ -95,28 +85,9 @@ def takeXGradient(cvImage):
     '''
     filter1 = np.array([[1], [2], [1]])
     filter2 = np.array([[1, 0, -1]])
-    shape = np.shape(cvImage)
-    if len(shape)==2:     
-        m,n = np.shape(cvImage)
-        conv1 = convolve2d(cvImage, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
-        return conv2
-    else:#color image
-        #convolve each channel seperately
-        b,g,r = cv2.split(cvImage)        
-        conv1_b = convolve2d(b, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_b = convolve2d(b, filter2, mode='same', boundary='fill', fillvalue=0)
-        conv1_g = convolve2d(g, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_g = convolve2d(g, filter2, mode='same', boundary='fill', fillvalue=0)
-        conv1_r = convolve2d(r, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_r = convolve2d(r, filter2, mode='same', boundary='fill', fillvalue=0)
-        img = cv2.merge((conv2_b,conv2_g,conv2_r))
-        return img
-        
-        
-    #this should work assuming c
-    #conv1 =scipy.ndimage.filters.convolve(cvImage, filter1, output=None, mode='constant', cval=0.0, origin=0)#conv1 = convolve2d(cvImage, filter1, mode='same', boundary='fill', fillvalue=0)
-    #conv2 = scipy.ndimage.filters.convolve(conv1, filter2, output=None, mode='constant', cval=0.0, origin=0)#conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
+    conv1 = convolve2d(cvImage, filter1, mode='same', boundary='fill', fillvalue=0)
+    conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
+    return conv2
 
     # TODO:PA2 Fill in this function
 def takeYGradient(cvImage):
@@ -133,24 +104,9 @@ def takeYGradient(cvImage):
     # '''
     filter1 = np.array([[1], [0], [-1]])
     filter2 = np.array([[1, 2, 1]])
-    shape = np.shape(cvImage)
-    if len(shape)==2:     
-        m,n = np.shape(cvImage)
-        conv1 = convolve2d(cvImage, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
-        return conv2
-    else:#color image
-        #convolve each channel seperately
-        b,g,r = cv2.split(cvImage)        
-        conv1_b = convolve2d(b, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_b = convolve2d(b, filter2, mode='same', boundary='fill', fillvalue=0)
-        conv1_g = convolve2d(g, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_g = convolve2d(g, filter2, mode='same', boundary='fill', fillvalue=0)
-        conv1_r = convolve2d(r, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_r = convolve2d(r, filter2, mode='same', boundary='fill', fillvalue=0)
-        #stick them back together
-        img = cv2.merge((conv2_b,conv2_g,conv2_r))
-        return img
+    conv1 = convolve2d(cvImage, filter1, mode='same', boundary='fill', fillvalue=0)
+    conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
+    return conv2
     # # TODO:PA2 Fill in this function
 def takeGradientMag(cvImage):
     '''
@@ -165,36 +121,15 @@ def takeGradientMag(cvImage):
     if multiple channels, handle each channel seperately.
     '''
     #take the gradient with respect to x and y and then find the magnitude of the gradient (by taking the dot product of it with itself)
-    shape = np.shape(cvImage)
-    if len(shape)==2:
-        grad_x = (takeXGradient(cvImage))
-        grad_x_sq = np.power(grad_x,2)
-        grad_y = (takeYGradient(cvImage))
-        grad_y_sq = np.power(grad_y,2)
-        return np.power(np.add(grad_x_sq, grad_y_sq), .5)
-
-    else:#color image
-        #convolve each channel seperately
-        grad_x = (takeXGradient(cvImage))
-        grad_x_b,grad_x_g,grad_x_r = cv2.split(grad_x)
-        grad_x_sq_b = np.power(grad_x_b,2)
-        grad_x_sq_g = np.power(grad_x_g,2)
-        grad_x_sq_r = np.power(grad_x_r,2)
-        
-        grad_y = (takeYGradient(cvImage))
-        grad_y_b,grad_y_g,grad_y_r = cv2.split(grad_y)
-        grad_y_sq_b = np.power(grad_y_b,2)
-        grad_y_sq_g = np.power(grad_y_g,2)
-        grad_y_sq_r = np.power(grad_y_r,2)
-        
-        sqrt_b = np.power(np.add(grad_x_sq_b, grad_y_sq_b), .5)
-        sqrt_g =np.power(np.add(grad_x_sq_g, grad_y_sq_g), .5)
-        sqrt_r =np.power(np.add(grad_x_sq_r, grad_y_sq_r), .5)
-
-        mg = cv2.merge((sqrt_b,sqrt_g,sqrt_r))
-        return mg
-
+    grad = []
+    grad_x = (takeXGradient(cvImage))
+    grad_x_sq = np.power(grad_x,2)
+    
+    grad_y = (takeYGradient(cvImage))
+    grad_y_sq = np.power(grad_y,2)
+    
     #add the two squared gradients together and take the square root.
+    return np.power(np.add(grad_x_sq, grad_y_sq), .5)
 
 #########################################################
 ###    Part B: k-Means Segmentation Functions
@@ -391,21 +326,13 @@ def approxNormalizedBisect(W, d):
         y_1 - the second smallest eigenvector of D-W
     """
     #construct I-D**(-1/2)*W*D**(-1/2)
-    m_n = len(d)
-    I = scipy.sparse.identity(m_n)
-    #d_diag = np.zeros((m_n,m_n))
-    #print(d)
-    d_sqrt =  np.sqrt(d)
-    neg_sqrt_d = np.reciprocal(d_sqrt)
-    d_diag = spdiags(neg_sqrt_d ,0,m_n,m_n)
-    D_neg_1_half = np.sqrt(d_diag)
-    #L = I-np.matmul(np.matmul(D_neg_1_half, W), D_neg_1_half)
-    L = I-scipy.sparse.csr_matrix.dot(scipy.sparse.csr_matrix.dot(D_neg_1_half, W), D_neg_1_half)
-    print(L)
+    m_n = np.shape(d)
+    I = np.identity(m_n)
+    D_neg_1_half = np.power(d,-.5)
+    L = I-np.mat_mul(np.mat_mul(D_neg_1_half, W), D_neg_1_half)
     #find the second smallest eigenvector z
     #compute y = D**(-1/2)*z
     w,v = scipy.linalg.eigh(L)
-    #print(w)
     y=v[:,0]
     return y
 
@@ -430,13 +357,24 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
     """
     sigmaXsq = sigmaX**2
     sigmaFsq = sigmaF**2
-    shape = np.shape(cvImage)
-    m,n = shape[0],shape[1]
+    m,n = np.shape(cvImage)
     w = np.zeros((m*n,m*n))
     dist_exponent_mat = np.zeros((m*n,m*n))
     c_exponent_mat    = np.zeros((m*n,m*n))
     
     
+    #x_for_e = np.zeros((m,n))
+    
+    #c_for_e  = np.zeros((m,n))
+    
+    # for i in range(m*n):
+    #     for j in range(m*n):
+    #         l = i%m
+    #         k = l%n
+    #         dist  = math.sqrt((l-)**2+(k)**2)
+    #         if dists[i][j]<=r:
+    #             dists[i][j] = dist
+
     for i in range(m):
         for j in range(n):
             #l = i%m
@@ -445,44 +383,45 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
             for k in range (m):
                 for l in range (n):
                     dist = math.sqrt(((i-k)**2)+((j-l)**2))
-                    if dist>=r:
+                    if dist<=r:
                         x_exponent = 0
                     else:
                         x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
                     i_j_row.append(x_exponent)
-            dist_exponent_mat[i*m+j] = i_j_row #fill the entire row for pixel i,m
-    #print(dist_exponent_mat)
-    if len(shape) == 2:
-        for i in range(m):
-            for j in range(n):
-                #l = i%m
-                #k = j%n
-                c_ij = cvImage[i][j]
-                i_j_row = []#np.zeros(m*n)
-                for k in range (m):
-                    for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
-                        c_exponent  =  ((-1*math.sqrt((c_ij-cvImage[k][l])**2)))/sigmaFsq #distance between all j,k and i
-                        i_j_row.append(c_exponent)
-                c_exponent_mat[i*m+j] = i_j_row #fill the entire row for pixel i,j
-    else:#colored image
-        b,g,r = cv2.split(cvImage)
-        for i in range(m):
-            for j in range(n):
-                #l = i%m
-                #k = j%n
-                c_ij = cvImage[i][j]
-                i_j_row = []#np.zeros(m*n)
-                for k in range (m):
-                    for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
-                        c_exponent  =  (-1*np.linalg.norm(c_ij-cvImage[k][l]))/sigmaFsq #distance between all j,k and i
-                        i_j_row.append(c_exponent)
-                c_exponent_mat[i*m+j] = i_j_row #fill the entire row for pixel i,j
+            dist_exponent_mat[i*m+j] = i_j_row #fill the entir row for pixel i,m
+    # for i in range(m):
+    #     for j in range(n):
+    #         dist        = math.sqrt(i**2+j**2)
+    #         if dists[i][j]<=r:
+    #             dists[i][j] = dist
+    #             x_for_the_e = (-1*dist)/sigmaXsq
+    # 
+    # for i in range(m):
+    #     for j in range(n):
+    #         c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
+    # es_to_the_c_term = np.exp(c_for_e)
+    # es_to_the_x_term = np.exp(x_for_e)
+    for i in range(m):
+        for j in range(n):
+            #l = i%m
+            #k = j%n
+            c_ij = cvImage[i][j]
+            i_j_row = []#np.zeros(m*n)
+            for k in range (m):
+                for l in range (n):
+                    c_exponent  =  ((-1*math.sqrt((c_ij-cvImage[k][l])**2)))/sigmaFsq #distance between all j,k and i
+                    i_j_row.append(c_exponent)
+            c_exponent_mat[i*m+j] = i_j_row #fill the entir row for pixel i,m
+    
+    print(c_exponent_mat)
     
     es_to_the_c_terms = np.exp(c_exponent_mat)
     es_to_the_x_terms = np.exp(dist_exponent_mat)
     
     for o in range (m*n):
         for p in range (m*n):
+            #for i in range(m):
+            #    for j in range(n):
             w[o][p] = es_to_the_c_terms[o][p]*es_to_the_x_terms[o][p]
     return w
 
@@ -504,16 +443,15 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
                          and blue otherwise.
     """
     bools = y>0
-    
-    n,m,c = np.shape(cvImage)
-    new = np.zeros((n,m,c))
+    n,m = np.shape(cvImage)
+    new = np.zeros((n,m))
     for i in range(m):
         for j in range(n):
             if bools[i*m+j]==True:
-                new[i][j] = [0,255,255] #try: im2[np.where((y>0).all(axis = 2))] = [0,255,255]
+                new[i][j] = 
             else:
-                new[i][j] = [0,255,0]
-    return new#scipy.misc.toimage(new)
+                new[i][j] = 
+    return new
             
     
 def nCutSegmentation(cvImage, sigmaF=5, sigmaX=6):
@@ -525,24 +463,19 @@ def nCutSegmentation(cvImage, sigmaF=5, sigmaX=6):
     y = approxNormalizedBisect(W, d)
     print("Reconstructing segments")
     segments = reconstructNCutSegments(cvImage, y, 0)
-    print(segments)
     return segments
 
 def printa(nparray):
-    def genspaces(num):
-        spaces = ""
-        for i in range(num):
-            spaces += " "
-        return spaces
+    def genspaces(num)
     m,n = np.shape(nparray)
-    # print ("[", end='')
+    print ("[", end='')
     for i in range(m):
-        # print ("[", end='')
+        print ("[", end='')
         for j in range (n):
-            # print((nparray[i][j]+", "+genspaces(7-len(str(nparray[i][j]))),end='')
-        # if i==m-1:
-            # print ("]", end ='')
-            print ("]")
+            print((nparray[i][j]+", "+genspaces(7-len(str(nparray[i][j]))),end='')
+        if i==m-1:
+            print ("]", end='')
+        print ("]")
 # if __name__ == "__main__":
 #     cvImage = np.array([[10,11,12],[13,14,15],[16,17,18]])
 #     minIn = 10
@@ -554,12 +487,12 @@ def printa(nparray):
 #     #print(getDisplayGradient(gradientImage))
 #     #imageForGradient = np.array([[0,5,10],[5,50,70],[80,90,100]])
 #     # imageForGradient = np.array([[9,9,9],[9,9,9],[9,9,9]])
-#      imageForGradient = np.array([[0,0,0],[0,0,0],[0,0,0]])
-# # 
-# # 
-#     print(takeXGradient(imageForGradient))
-#     processed = ndimage.sobel(imageForGradient, axis=0, mode = 'constant', cval=0.0)
-#     print(processed)
+#     imageForGradient = np.array([[0,0,0],[0,0,0],[0,0,0]])
+# 
+# 
+#     #print(takeYGradient(imageForGradient))
+#     #processed = ndimage.sobel(imageForGradient, axis=0, mode = 'constant', cval=0.0)
+#     #print(processed)
 #     
 #     #print(takeGradientMag(imageForGradient ))
 #     #print (chooseRandomCenters(cvImage, 1))

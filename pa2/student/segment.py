@@ -406,7 +406,7 @@ def approxNormalizedBisect(W, d):
 
     #find the second smallest eigenvector z
     #compute y = D**(-1/2)*z
-    w,v = np.linalg.eigh(L,b=D)
+    w,v = np.linalg.eigh(L,b=np.diag(d))
     #print("w is")
     #print(w)
     # argsorted = np.argsort(w)

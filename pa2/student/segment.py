@@ -429,13 +429,15 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
     #dist_exponent_mat = np.zeros((m*n,m*n))
     #c_exponent_mat    = np.zeros((m*n,m*n))
     for i in range (m*n):
+        o = i%n
+        p = i%m
         for j in range (m*n):
-            k = i%m
+            k = j%m
             l = j%n
-            dist = np.linalg.norm(np.array([i,j])-np.array([k,l]))
+            dist = np.linalg.norm(np.array([o,p])-np.array([k,l]))
             if dist <= r:
                 x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
-                c_exponent = (-1*np.linalg.norm(cvImage[i][j]-cvImage[l][k]))/sigmaFsq
+                c_exponent = (-1*np.linalg.norm(cvImage[o][p]-cvImage[k][l]))/sigmaFsq
                 entry   = np.exp(x_exponent)*np.exp(c_exponent)
                 w[i][j] = entry
     return w       

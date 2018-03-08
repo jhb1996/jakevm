@@ -510,7 +510,7 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
             if bools[(i*n)+j]==True:
                 new[i][j] = [0,255,255] #try: im2[np.where((y>0).all(axis = 2))] = [0,255,255]
             else:
-                new[i][j] = [0,255,0]
+                new[i][j] = [255,0,0]
     return new#scipy.misc.toimage(new)
             
     

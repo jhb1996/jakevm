@@ -399,29 +399,28 @@ def approxNormalizedBisect(W, d):
     neg_sqrt_d = np.reciprocal(d_sqrt)
     neg_sqrt_d_diag = np.diag(neg_sqrt_d)#spdiags(neg_sqrt_d ,0,m_n,m_n)
     #L = I-neg_sqrt_d_diag * W * neg_sqrt_d_diag
-    # L = I-np.dot(np.dot((neg_sqrt_d_diag),W), neg_sqrt_d_diag)
-    L = np.diag(d) - W
+    L = I-np.dot(np.dot((neg_sqrt_d_diag),W), neg_sqrt_d_diag)
+
     #L = I-scipy.sparse.csr_matrix.dot(scipy.sparse.csr_matrix.dot(neg_sqrt_d_diag, W), neg_sqrt_d_diag)
     #L = I-np.matmul(np.matmul(D_neg_1_half, W), D_neg_1_half)
 
     #find the second smallest eigenvector z
     #compute y = D**(-1/2)*z
-    w,v = scipy.linalg.eigh(L,b=np.diag(d))
+    w,v = scipy.linalg.eigh(L)
     #print("w is")
     #print(w)
-    # argsorted = np.argsort(w)
-    z=v[:1]
+    argsorted = np.argsort(w)
+    z=v[:,argsorted[1]]
     #print ("v is")
     #print (v)
     #y=v[:,0]
     d_inverse = np.reciprocal(d)
     #np.
-    #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    #print(np.shape(d_inverse))
-    #print(np.shape(np.transpose(z)))
-    #print(np.shape(z))
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(np.shape(d_inverse))
+    print(np.shape(z))
 
-    return z
+    return np.dot(neg_sqrt_d_diag, np.transpose(z))
 
 # TODO:PA2 Fill in this function
 def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):

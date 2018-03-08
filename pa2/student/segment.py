@@ -504,7 +504,7 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
     """
     bools = y>0
     
-    n,m,c = np.shape(cvImage)
+    m,n,c = np.shape(cvImage)
     new = np.zeros((m,n,c))
     for i in range(m):
         for j in range(n):

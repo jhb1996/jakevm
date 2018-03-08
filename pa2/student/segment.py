@@ -418,7 +418,7 @@ def approxNormalizedBisect(W, d):
     #np.
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     print(np.shape(d_inverse))
-    print(np.transpose(z))
+    print(np.shape(np.transpose(z)))
     print(np.shape(z))
 
     return np.dot(d_inverse, np.transpose(z))

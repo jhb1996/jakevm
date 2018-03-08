@@ -398,7 +398,7 @@ def approxNormalizedBisect(W, d):
     d_sqrt =  np.sqrt(d)
     neg_sqrt_d = np.reciprocal(d_sqrt)
     neg_sqrt_d_diag = np.diag(d)#spdiags(neg_sqrt_d ,0,m_n,m_n)
-    L = I-np.matmul(np.matmul((D_neg_1_half),W), D_neg_1_half)
+    L = I-np.matmul(np.matmul((neg_sqrt_d_diag),W), neg_sqrt_d_diag)
 
     #L = I-scipy.sparse.csr_matrix.dot(scipy.sparse.csr_matrix.dot(neg_sqrt_d_diag, W), neg_sqrt_d_diag)
     #L = I-np.matmul(np.matmul(D_neg_1_half, W), D_neg_1_half)

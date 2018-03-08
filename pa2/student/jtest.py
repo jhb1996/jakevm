@@ -56,14 +56,15 @@ if __name__ == "__main__":
     #print (takeGradientMag(imageForGradient))
     
     cvImage = np.array([[[100,200,200],[0,200,200],[0,0,0]],[[200,290,200],[200,200,200],[200,200,200]],[[100,90,100],[100,100,100],[100,100,100]]])
-    cvImage2 = np.array([[100,90,100],[100,100,100]])
+    cvImage2 = np.array([[[100,90,100],[100,100,100],[100,100,100]],[[100,90,100],[100,100,100],[100,100,100]]])
 
     
     W = getColorWeights(cvImage2, 10, sigmaF=1, sigmaX=1)
+    print (W)
     #print (W)
-    d = getTotalNodeWeights(W)
+    #d = getTotalNodeWeights(W)
     #print(d)
-    y = approxNormalizedBisect(W, d)
-    print(y)
-    segments = reconstructNCutSegments(cvImage, y, 0)
+    #y = approxNormalizedBisect(W, d)
+    #print(y)
+    #segments = reconstructNCutSegments(cvImage, y, 0)
 

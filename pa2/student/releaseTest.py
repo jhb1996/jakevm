@@ -55,10 +55,10 @@ class TestSegment(unittest.TestCase):
     def test_ncut_reconstruct(self):
         img, y, exp_out = self.data['C']['imgs'], self.data['C']['ys'], self.data['C']['outs']
         res_out = segment.reconstructNCutSegments(img, y)
-        print (np.size(res_out))
-        print (np.size(exp_out))
-        print (res_out[:5])
-        print (exp_out[:5])
+        print (np.shape(res_out))
+        print (np.shape(exp_out))
+        print (res_out[0])
+        print (exp_out[0])
         self.assertTrue(np.allclose(exp_out, res_out, atol=EPSILON))
 
 if __name__ == '__main__':

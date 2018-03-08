@@ -397,11 +397,9 @@ def approxNormalizedBisect(W, d):
     #print(d)
     d_sqrt =  np.sqrt(d)
     neg_sqrt_d = np.reciprocal(d_sqrt)
-    d_diag = spdiags(neg_sqrt_d ,0,m_n,m_n)
-    D_neg_1_half = np.sqrt(d_diag)
+    neg_sqrt_d_diag = spdiags(neg_sqrt_d ,0,m_n,m_n)
     #L = I-np.matmul(np.matmul(D_neg_1_half, W), D_neg_1_half)
-    L = I-scipy.sparse.csr_matrix.dot(scipy.sparse.csr_matrix.dot(D_neg_1_half, W), D_neg_1_half)
-    print(L)
+    L = I-scipy.sparse.csr_matrix.dot(scipy.sparse.csr_matrix.dot(neg_sqrt_d_diag, W), neg_sqrt_d_diag)
     #find the second smallest eigenvector z
     #compute y = D**(-1/2)*z
     w,v = scipy.linalg.eigh(L)
@@ -450,7 +448,8 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                     else:
                         x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
                     i_j_row.append(x_exponent)
-            dist_exponent_mat[i*m+j] = i_j_row #fill the entire row for pixel i,m
+            print(len(i_j_row))
+            dist_exponent_mat[(i*m)+j] = i_j_row #fill the entire row for pixel i,m
     #print(dist_exponent_mat)
     if len(shape) == 2:
         for i in range(m):
@@ -463,7 +462,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                     for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
                         c_exponent  =  ((-1*math.sqrt((c_ij-cvImage[k][l])**2)))/sigmaFsq #distance between all j,k and i
                         i_j_row.append(c_exponent)
-                c_exponent_mat[i*m+j] = i_j_row #fill the entire row for pixel i,j
+                c_exponent_mat[(i*m)+j] = i_j_row #fill the entire row for pixel i,j
     else:#colored image
         b,g,r = cv2.split(cvImage)
         for i in range(m):
@@ -476,7 +475,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                     for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
                         c_exponent  =  (-1*np.linalg.norm(c_ij-cvImage[k][l]))/sigmaFsq #distance between all j,k and i
                         i_j_row.append(c_exponent)
-                c_exponent_mat[i*m+j] = i_j_row #fill the entire row for pixel i,j
+                c_exponent_mat[(i*m)+j] = i_j_row #fill the entire row for pixel i,j
     
     es_to_the_c_terms = np.exp(c_exponent_mat)
     es_to_the_x_terms = np.exp(dist_exponent_mat)
@@ -509,7 +508,7 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
     new = np.zeros((n,m,c))
     for i in range(m):
         for j in range(n):
-            if bools[i*m+j]==True:
+            if bools[(i*m)+j]==True:
                 new[i][j] = [0,255,255] #try: im2[np.where((y>0).all(axis = 2))] = [0,255,255]
             else:
                 new[i][j] = [0,255,0]

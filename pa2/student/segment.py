@@ -397,7 +397,7 @@ def approxNormalizedBisect(W, d):
     #print(d)
     d_sqrt =  np.sqrt(d)
     neg_sqrt_d = np.reciprocal(d_sqrt)
-    neg_sqrt_d_diag = np.diag(d)#spdiags(neg_sqrt_d ,0,m_n,m_n)
+    neg_sqrt_d_diag = np.diag(neg_sqrt_d)#spdiags(neg_sqrt_d ,0,m_n,m_n)
     L = I-np.dot(np.dot((neg_sqrt_d_diag),W), neg_sqrt_d_diag)
 
     #L = I-scipy.sparse.csr_matrix.dot(scipy.sparse.csr_matrix.dot(neg_sqrt_d_diag, W), neg_sqrt_d_diag)
@@ -437,58 +437,67 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
     shape = np.shape(cvImage)
     m,n = shape[0],shape[1]
     w = np.zeros((m*n,m*n))
-    dist_exponent_mat = np.zeros((m*n,m*n))
-    c_exponent_mat    = np.zeros((m*n,m*n))
-    
-    
-    for i in range(m):
-        for j in range(n):
-            #l = i%m
-            #k = j%n
-            i_j_row = []#np.zeros(m*n)
-            for k in range (m):
-                for l in range (n):
-                    dist = math.sqrt(((i-k)**2)+((j-l)**2))
-                    if dist>=r:
-                        x_exponent = 0
-                    else:
-                        x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
-                    i_j_row.append(x_exponent)
-            dist_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,m
-    #print(dist_exponent_mat)
-    if len(shape) == 2:
-        for i in range(m):
-            for j in range(n):
-                #l = i%m
-                #k = j%n
-                c_ij = cvImage[i][j]
-                i_j_row = []#np.zeros(m*n)
-                for k in range (m):
-                    for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
-                        c_exponent  =  ((-1*math.sqrt((c_ij-cvImage[k][l])**2)))/sigmaFsq #distance between all j,k and i
-                        i_j_row.append(c_exponent)
-                c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
-    else:#colored image
-        #b,g,r = cv2.split(cvImage)
-        for i in range(m):
-            for j in range(n):
-                #l = i%m
-                #k = j%n
-                c_ij = cvImage[i][j]
-                i_j_row = []#np.zeros(m*n)
-                for k in range (m):
-                    for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
-                        c_exponent  =  (-1*np.linalg.norm(c_ij-cvImage[k][l]))/sigmaFsq #distance between all j,k and i
-                        i_j_row.append(c_exponent)
-                c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
-    
-    es_to_the_c_terms = np.exp(c_exponent_mat)
-    es_to_the_x_terms = np.exp(dist_exponent_mat)
-    
-    for o in range (m*n):
-        for p in range (m*n):
-            w[o][p] = es_to_the_c_terms[o][p]*es_to_the_x_terms[o][p]
-    return w
+    #dist_exponent_mat = np.zeros((m*n,m*n))
+    #c_exponent_mat    = np.zeros((m*n,m*n))
+    for i in range (m*n):
+        for j in range (m*n):
+            k = i%m
+            l = j%n
+            dist = np.norm([i,j],[k,l])
+            if dist <= r:
+                x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
+                c_exponent = (-1*np.linalg.norm(c_ij-cvImage[l][k]))/sigmaFsq 
+                
+                #w[]
+                
+    # for i in range(m):
+    #     for j in range(n):
+    #         #l = i%m
+    #         #k = j%n
+    #         i_j_row = []#np.zeros(m*n)
+    #         for k in range (m):
+    #             for l in range (n):
+    #                 dist = math.sqrt(((i-k)**2)+((j-l)**2))
+    #                 if dist>=r:
+    #                     x_exponent = 0
+    #                 else:
+    #                     x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
+    #                 i_j_row.append(x_exponent)
+    #         dist_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,m
+    # #print(dist_exponent_mat)
+    # if len(shape) == 2:
+    #     for i in range(m):
+    #         for j in range(n):
+    #             #l = i%m
+    #             #k = j%n
+    #             c_ij = cvImage[i][j]
+    #             i_j_row = []#np.zeros(m*n)
+    #             for k in range (m):
+    #                 for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
+    #                     c_exponent  =  ((-1*math.sqrt((c_ij-cvImage[k][l])**2)))/sigmaFsq #distance between all j,k and i
+    #                     i_j_row.append(c_exponent)
+    #             c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
+    # else:#colored image
+    #     #b,g,r = cv2.split(cvImage)
+    #     for i in range(m):
+    #         for j in range(n):
+    #             #l = i%m
+    #             #k = j%n
+    #             c_ij = cvImage[i][j]
+    #             i_j_row = []#np.zeros(m*n)
+    #             for k in range (m):
+    #                 for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
+    #                     c_exponent  =  (-1*np.linalg.norm(c_ij-cvImage[k][l]))/sigmaFsq #distance between all j,k and i
+    #                     i_j_row.append(c_exponent)
+    #             c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
+    # 
+    # es_to_the_c_terms = np.exp(c_exponent_mat)
+    # es_to_the_x_terms = np.exp(dist_exponent_mat)
+    # 
+    # for o in range (m*n):
+    #     for p in range (m*n):
+    #         w[o][p] = es_to_the_c_terms[o][p]*es_to_the_x_terms[o][p]
+    # return w
 
 # TODO:PA2 Fill in this function
 def reconstructNCutSegments(cvImage, y, threshold=0):

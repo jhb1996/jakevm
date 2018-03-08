@@ -57,7 +57,7 @@ class TestSegment(unittest.TestCase):
         res_out = segment.reconstructNCutSegments(img, y)
         print (np.shape(res_out))
         print (np.shape(exp_out))
-        for i in range (5):
+        for i in range (10):
             for j in range (7):
                 for k in range (3):
                     if (res_out[i][j][k] != exp_out[i][j][k]):

@@ -154,7 +154,6 @@ def takeYGradient(cvImage):
         img [:,:,0] = conv2_b
         img [:,:,1] = conv2_g
         img [:,:,2] = conv2_r
-        
         return img
     # # TODO:PA2 Fill in this function
 def takeGradientMag(cvImage):
@@ -426,11 +425,9 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
             closely each pair of pixels is connected
     
     """
-    print("---------------------------------------------------&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7")
     sigmaXsq = sigmaX**2
     sigmaFsq = sigmaF**2
     shape = np.shape(cvImage)
-    print (shape)
     m,n = shape[0],shape[1]
     w = np.zeros((m*n,m*n))
 
@@ -500,7 +497,7 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
                          for pixels with values above the threshold
                          and blue otherwise.
     """
-    bools = y>0
+    bools = y>threshold
     m,n,c = np.shape(cvImage)
     new = np.zeros((m,n,c))
     for i in range(m):
@@ -509,7 +506,7 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
                 new[i][j] = [0,255,255] #try: im2[np.where((y>0).all(axis = 2))] = [0,255,255]
             else:
                 new[i][j] = [255,0,0]
-    return new#scipy.misc.toimage(new)
+    return new
             
     
 def nCutSegmentation(cvImage, sigmaF=5, sigmaX=6):

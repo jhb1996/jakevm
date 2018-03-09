@@ -80,7 +80,7 @@ def getDisplayGradient(gradientImage):
     return normalized.astype(np.uint8)
     
 # TODO:PA2 Fill in this function
-def my_convolve(img, kernel):
+def myconvolve(img, kernel):
     '''Given a kernel of arbitrary m x n dimensions, with both m and n being
     odd, compute the cross correlation of the given image with the given
     kernel, such that the output is of the same dimensions as the image and that

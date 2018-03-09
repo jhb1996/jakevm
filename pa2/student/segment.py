@@ -438,6 +438,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
     #     if i%n == 0:
     #         o+=1
     #     k = -1
+    
     #subtract every pixel in cvimage from cvimage[i][j]
     #take the elementwise norm of everything
     #raise it all to an exponent
@@ -476,7 +477,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
             if dist <= r:
                 x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
                 c_exponent = (-1*np.linalg.norm(cvImage[o][p]-cvImage[k][l]))/sigmaFsq
-                entry   = np.exp(x_exponent)*np.exp(c_exponent)
+                entry   = np.multiply(np.exp(x_exponent), np.exp(c_exponent))
                 w[i][j] = entry
     return w       
 

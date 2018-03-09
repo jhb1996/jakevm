@@ -104,14 +104,20 @@ def takeXGradient(cvImage):
         return conv2
     else:#color image
         #convolve each channel seperately
-        b,g,r = cv2.split(cvImage32)
+        b,g,r = cvImage32[:, :, 0], cvImage32[:, :, 1], cvImage32[:, :, 2] #cv2.split(cvImage32)
         conv1_b = convolve2d(b,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_b = convolve2d(conv1_b, filter2, mode='same', boundary='fill', fillvalue=0)
         conv1_g = convolve2d(g,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_g = convolve2d(conv1_g, filter2, mode='same', boundary='fill', fillvalue=0)
         conv1_r = convolve2d(r,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_r = convolve2d(conv1_r, filter2, mode='same', boundary='fill', fillvalue=0)
-        img = cv2.merge((conv2_b,conv2_g,conv2_r))
+        img = np.zeros(shape)
+        img[:, :, 0] = conv2_b
+        img[:, :, 1] = conv2_g
+        img[:, :, 2] = conv2_r
+        #b,g,r = cvImage32[:, :, 0], cvImage32[:, :, 1], cvImage32[:, :, 2] #cv2.split(cvImage32)
+
+        #img = cv2.merge((conv2_b,conv2_g,conv2_r))
         return img
         
         

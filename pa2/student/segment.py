@@ -422,14 +422,45 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
             closely each pair of pixels is connected
     
     """
+    print("---------------------------------------------------&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7")
     sigmaXsq = sigmaX**2
     sigmaFsq = sigmaF**2
     shape = np.shape(cvImage)
     print (shape)
     m,n = shape[0],shape[1]
     w = np.zeros((m*n,m*n))
-    #dist_exponent_mat = np.zeros((m*n,m*n))
-    #c_exponent_mat    = np.zeros((m*n,m*n))
+
+
+    # o=-1
+    # for i in range (m*n):
+    #     p = i%n
+    #     if i%n == 0:
+    #         o+=1
+    #     k = -1
+    #subtract every pixel in cvimage from cvimage[i][j]
+    #take the elementwise norm of everything
+    #raise it all to an exponent
+    #reshape it into a 1*n*3 and stick it in i
+    
+    
+    # o=-1
+    # for i in range (m*n):
+    #     p = i%n
+    #     if i%n == 0:
+    #         o+=1
+    #     k = -1
+    #     for j in range (m*n):
+    #         l = j%n
+    #         if j%n == 0:
+    #             k+=1
+    #         dist = np.linalg.norm(np.array([o,p])-np.array([k,l]))
+    #         if dist <= r:
+    #             x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
+    #             c_exponent = (-1*np.linalg.norm(cvImage[o][p]-cvImage[k][l]))/sigmaFsq
+    #             entry   = np.exp(x_exponent)*np.exp(c_exponent)
+    #             w[i][j] = entry
+    # return w 
+
     o=-1
     for i in range (m*n):
         p = i%n
@@ -447,54 +478,6 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
                 entry   = np.exp(x_exponent)*np.exp(c_exponent)
                 w[i][j] = entry
     return w       
-    # for i in range(m):
-    #     for j in range(n):
-    #         #l = i%m
-    #         #k = j%n
-    #         i_j_row = []#np.zeros(m*n)
-    #         for k in range (m):
-    #             for l in range (n):
-    #                 dist = math.sqrt(((i-k)**2)+((j-l)**2))
-    #                 if dist>=r:
-    #                     x_exponent = 0
-    #                 else:
-    #                     x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
-    #                 i_j_row.append(x_exponent)
-    #         dist_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,m
-    # #print(dist_exponent_mat)
-    # if len(shape) == 2:
-    #     for i in range(m):
-    #         for j in range(n):
-    #             #l = i%m
-    #             #k = j%n
-    #             c_ij = cvImage[i][j]
-    #             i_j_row = []#np.zeros(m*n)
-    #             for k in range (m):
-    #                 for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
-    #                     c_exponent  =  ((-1*math.sqrt((c_ij-cvImage[k][l])**2)))/sigmaFsq #distance between all j,k and i
-    #                     i_j_row.append(c_exponent)
-    #             c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
-    # else:#colored image
-    #     #b,g,r = cv2.split(cvImage)
-    #     for i in range(m):
-    #         for j in range(n):
-    #             #l = i%m
-    #             #k = j%n
-    #             c_ij = cvImage[i][j]
-    #             i_j_row = []#np.zeros(m*n)
-    #             for k in range (m):
-    #                 for l in range (n): # c_for_e [i][j] = (-1*math.sqrt(cvImage[i]**2+cvImage[j]**2))/sigmaFsq #scipy.spatial.distance.euclidean
-    #                     c_exponent  =  (-1*np.linalg.norm(c_ij-cvImage[k][l]))/sigmaFsq #distance between all j,k and i
-    #                     i_j_row.append(c_exponent)
-    #             c_exponent_mat[(i*n)+j] = i_j_row #fill the entire row for pixel i,j
-    # 
-    # es_to_the_c_terms = np.exp(c_exponent_mat)
-    # es_to_the_x_terms = np.exp(dist_exponent_mat)
-    # 
-    # for o in range (m*n):
-    #     for p in range (m*n):
-    #         w[o][p] = es_to_the_c_terms[o][p]*es_to_the_x_terms[o][p]
-    # return w
 
 # TODO:PA2 Fill in this function
 def reconstructNCutSegments(cvImage, y, threshold=0):

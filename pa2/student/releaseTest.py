@@ -21,13 +21,15 @@ class TestSegment(unittest.TestCase):
         student_out = segment.normalizeImage(img, *params)
         self.assertTrue(np.allclose(exp_out, student_out, atol=EPSILON))
     
-    # def test_grad(self):
-        # img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
-        # xgrad, ygrad, maggrad = segment.takeXGradient(img),segment.takeYGradient(img),\
-        #         segment.takeGradientMag(img)
-        # self.assertTrue(np.allclose(xgrad_exp, xgrad, atol=EPSILON))
-        #self.assertTrue(np.allclose(ygrad_exp, ygrad, atol=EPSILON))
-        #self.assertTrue(np.allclose(maggrad_exp, maggrad, atol=EPSILON))
+    def test_grad(self):
+        img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
+        xgrad, ygrad, maggrad = segment.takeXGradient(img),segment.takeYGradient(img),\
+                segment.takeGradientMag(img)
+        print (xgrad)
+        print (xgrad_exp)
+        self.assertTrue(np.allclose(xgrad_exp, xgrad, atol=EPSILON))
+        self.assertTrue(np.allclose(ygrad_exp, ygrad, atol=EPSILON))
+        self.assertTrue(np.allclose(maggrad_exp, maggrad, atol=EPSILON))
         
         # img, xgrad_exp, ygrad_exp, maggrad_exp = self.data['A_grad']
         # xgrad = segment.takeXGradient(img)#,segment.takeYGradient(img),\

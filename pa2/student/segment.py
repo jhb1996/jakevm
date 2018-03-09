@@ -533,7 +533,7 @@ def nCutSegmentation(cvImage, sigmaF=5, sigmaX=6):
     y = approxNormalizedBisect(W, d)
     print("Reconstructing segments")
     segments = reconstructNCutSegments(cvImage, y, 0)
-    return segments#.astype(uint8)
+    return segments.astype(np.uint8)
 
 # def printa(nparray):
 #     def genspaces(num):

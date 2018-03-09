@@ -77,7 +77,7 @@ def getDisplayGradient(gradientImage):
     maxIn = extreme 
     minIn = extreme*-1 #is the max and min just the positive and negative of the extreme values?
     normalized = normalizeImage(gradientImage, minIn, maxIn, 0, 255)
-    return normalized
+    return normalized.astype(np.uint8)
     
 # TODO:PA2 Fill in this function
 def takeXGradient(cvImage):
@@ -151,7 +151,7 @@ def takeYGradient(cvImage):
         conv1_r = convolve2d(r,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_r = convolve2d(conv1_r, filter2, mode='same', boundary='fill', fillvalue=0)
         img = cv2.merge((conv2_b,conv2_g,conv2_r))
-        return img.astype(int8)
+        return img
     # # TODO:PA2 Fill in this function
 def takeGradientMag(cvImage):
     '''

@@ -104,11 +104,7 @@ def takeXGradient(cvImage):
         return conv2
     else:#color image
         #convolve each channel seperately
-        print("rgb is running----------------------------------------------")
         b,g,r = cv2.split(cvImage32)
-        #b =
-        #g
-        #r
         conv1_b = convolve2d(b,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_b = convolve2d(conv1_b, filter2, mode='same', boundary='fill', fillvalue=0)
         conv1_g = convolve2d(g,       filter1, mode='same', boundary='fill', fillvalue=0)
@@ -136,26 +132,26 @@ def takeYGradient(cvImage):
     # Return:
     # yGrad - the derivative of cvImage at each position w.r.t. the y axis.
     # '''
-    filter1 = np.array([[1], [0], [-1]])
-    filter2 = np.array([[1, 2, 1]])
-    shape = np.shape(cvImage)
+    cvImage32 = cvImage.astype(np.float32)
+    filter1 = np.array([[1], [2], [1]])
+    filter2 = np.array([[1, 0, -1]])
+    shape = np.shape(cvImage32)
     if len(shape)==2:     
-        m,n = np.shape(cvImage)
-        conv1 = convolve2d(cvImage, filter1, mode='same', boundary='fill', fillvalue=0)
+        m,n = np.shape(cvImage32)
+        conv1 = convolve2d(cvImage32, filter1, mode='same', boundary='fill', fillvalue=0)
         conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
         return conv2
     else:#color image
         #convolve each channel seperately
-        b,g,r = cv2.split(cvImage)        
+        b,g,r = cv2.split(cvImage32)
         conv1_b = convolve2d(b,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_b = convolve2d(conv1_b, filter2, mode='same', boundary='fill', fillvalue=0)
         conv1_g = convolve2d(g,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_g = convolve2d(conv1_g, filter2, mode='same', boundary='fill', fillvalue=0)
         conv1_r = convolve2d(r,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_r = convolve2d(conv1_r, filter2, mode='same', boundary='fill', fillvalue=0)
-        #stick them back together
         img = cv2.merge((conv2_b,conv2_g,conv2_r))
-        return img
+        return img.astype(int8)
     # # TODO:PA2 Fill in this function
 def takeGradientMag(cvImage):
     '''
@@ -537,7 +533,7 @@ def nCutSegmentation(cvImage, sigmaF=5, sigmaX=6):
     y = approxNormalizedBisect(W, d)
     print("Reconstructing segments")
     segments = reconstructNCutSegments(cvImage, y, 0)
-    return segments.astype(int)
+    return segments#.astype(uint8)
 
 # def printa(nparray):
 #     def genspaces(num):

@@ -95,7 +95,7 @@ def takeXGradient(cvImage):
     '''
     cvImage32 = cvImage.astype(np.float32)
     filter1 = np.array([[1], [2], [1]], dtype = np.float32)
-    filter2 = np.array([[1, 0, -1]],dtype = np.float32)
+    filter2 = np.array([[1, 0, -1]], dtype = np.float32)
     shape = np.shape(cvImage32)
     if len(shape)==2:     
         m,n = np.shape(cvImage32)
@@ -133,8 +133,8 @@ def takeYGradient(cvImage):
     # yGrad - the derivative of cvImage at each position w.r.t. the y axis.
     # '''
     cvImage32 = cvImage.astype(np.float32)
-    filter1 = np.array([[1], [2], [1]])
-    filter2 = np.array([[1, 0, -1]])
+    filter1 = np.array([[1], [2], [1]], dtype = np.float32)
+    filter2 = np.array([[1, 0, -1]], dtype = np.float32)
     shape = np.shape(cvImage32)
     if len(shape)==2:     
         m,n = np.shape(cvImage32)
@@ -143,14 +143,18 @@ def takeYGradient(cvImage):
         return conv2
     else:#color image
         #convolve each channel seperately
-        b,g,r = cv2.split(cvImage32)
+        b,g,r = cvImage32[:,:,0],cvImage32[:,:,1],cvImage32[:,:,2] #cv2.split(cvImage32)
         conv1_b = convolve2d(b,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_b = convolve2d(conv1_b, filter2, mode='same', boundary='fill', fillvalue=0)
         conv1_g = convolve2d(g,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_g = convolve2d(conv1_g, filter2, mode='same', boundary='fill', fillvalue=0)
         conv1_r = convolve2d(r,       filter1, mode='same', boundary='fill', fillvalue=0)
         conv2_r = convolve2d(conv1_r, filter2, mode='same', boundary='fill', fillvalue=0)
-        img = cv2.merge((conv2_b,conv2_g,conv2_r))
+        img = np.zeros(shape,dtype=np.float32)#cv2.merge((conv2_b,conv2_g,conv2_r))
+        img [:,:,0] = conv2_b
+        img [:,:,1] = conv2_g
+        img [:,:,2] = conv2_r
+        
         return img
     # # TODO:PA2 Fill in this function
 def takeGradientMag(cvImage):

@@ -80,6 +80,69 @@ def getDisplayGradient(gradientImage):
     return normalized.astype(np.uint8)
     
 # TODO:PA2 Fill in this function
+def my_convolve(img, kernel):
+    '''Given a kernel of arbitrary m x n dimensions, with both m and n being
+    odd, compute the cross correlation of the given image with the given
+    kernel, such that the output is of the same dimensions as the image and that
+    you assume the pixels out of the bounds of the image to be zero. Note that
+    you need to apply the kernel to each channel separately, if the given image
+    is an RGB image.
+
+    Inputs:
+        img:    Either an RGB image (height x width x 3) or a grayscale image
+                (height x width) as a numpy array.
+        kernel: A 2D numpy array (m x n), with m and n both odd (but may not be
+                equal).
+
+    Output:
+        Return an image of the same dimensions as the input image (same width,
+        height and the number of color channels)
+    '''
+    kernel = np.flipud(np.fliplr(kernel))
+    imgShape = np.shape(img)
+    imgNumRows = imgShape[0] 
+    imgNumCols = imgShape[1] 
+    kerShape = np.shape(kernel)
+    kerNumRows = kerShape[0] 
+    kerNumCols = kerShape[1] 
+    ccdMat = np.zeros(imgShape)
+    grayscale = (len(imgShape)==2)
+    if (grayscale):
+        padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1))
+        padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1] = img
+        for i in range (imgNumRows):
+            for j in range (imgNumCols):
+                r1 = i+1
+                r2 = r1 + kerNumRows
+                c1 = j+1
+                c2 = c1 + kerNumCols
+                piece = padded[r1:r2, c1:c2]
+                mtp = np.multiply(piece, kernel)
+                sm = np.sum(mtp)
+                ccdMat[i][j] = sm
+        return ccdMat
+    else:
+        padded = np.zeros((imgNumRows+kerNumRows+1, imgNumCols+kerNumCols+1, 3))
+
+        padded[kerNumRows/2+1:imgNumRows+kerNumRows/2+1, kerNumCols/2+1:imgNumCols+kerNumCols/2+1, :] = img
+        #extend the kernal into (wxhx3)
+        k3D = np.zeros((kerNumRows,kerNumCols,3))
+        k3D[:,:,0] = kernel
+        k3D[:,:,1] = kernel
+        k3D[:,:,2] = kernel
+        for i in range (imgNumRows):
+            for j in range (imgNumCols):
+                r1 = i+1
+                r2 = r1 + kerNumRows
+                c1 = j+1
+                c2 = c1 + kerNumCols
+                piece = padded[r1:r2, c1:c2, :]
+                mtp = np.multiply(piece, k3D)
+                sm1 = np.sum(mtp, axis = 0)
+                sm2 = np.sum(sm1, axis = 0)
+                ccdMat[i][j] = sm2
+        return ccdMat
+
 def takeXGradient(cvImage):
     '''
     Compute the x-derivative of the input image with an appropriate
@@ -99,18 +162,21 @@ def takeXGradient(cvImage):
     shape = np.shape(cvImage32)
     if len(shape)==2:     
         m,n = np.shape(cvImage32)
-        conv1 = convolve2d(cvImage32, filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
+        conv1 = myconvolve(cvImage32, filter1)
+        conv2 = myconvolve(cvImage32, filter1)
+        
+        #conv1 = convolve2d(cvImage32, filter1, mode='same', boundary='fill', fillvalue=0)
+        #conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
         return conv2
     else:#color image
         #convolve each channel seperately
         b,g,r = cvImage32[:, :, 0], cvImage32[:, :, 1], cvImage32[:, :, 2] #cv2.split(cvImage32)
-        conv1_b = convolve2d(b,       filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_b = convolve2d(conv1_b, filter2, mode='same', boundary='fill', fillvalue=0)
-        conv1_g = convolve2d(g,       filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_g = convolve2d(conv1_g, filter2, mode='same', boundary='fill', fillvalue=0)
-        conv1_r = convolve2d(r,       filter1, mode='same', boundary='fill', fillvalue=0)
-        conv2_r = convolve2d(conv1_r, filter2, mode='same', boundary='fill', fillvalue=0)
+        conv1_b = myconvolve(b,       filter1)
+        conv2_b = myconvolve(conv1_b, filter2)
+        conv1_g = myconvolve(g,       filter1)
+        conv2_g = myconvolve(conv1_g, filter2)
+        conv1_r = myconvolve(r,       filter1)
+        conv2_r = myconvolve(conv1_r, filter2)
         img = np.zeros(shape)
         img[:, :, 0] = conv2_b
         img[:, :, 1] = conv2_g
@@ -122,7 +188,7 @@ def takeXGradient(cvImage):
         
         
     #this should work assuming c
-    #conv1 =scipy.ndimage.filters.convolve(cvImage, filter1, output=None, mode='constant', cval=0.0, origin=0)#conv1 = convolve2d(cvImage, filter1, mode='same', boundary='fill', fillvalue=0)
+    #conv1 =scipy.ndimage.filters.convolve(cvImage, filter1, output=None, mode='constant', cval=0.0, origin=0)#conv1 = myconvolve(cvImage, filter1)
     #conv2 = scipy.ndimage.filters.convolve(conv1, filter2, output=None, mode='constant', cval=0.0, origin=0)#conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
 
     # TODO:PA2 Fill in this function

@@ -425,6 +425,7 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
     sigmaXsq = sigmaX**2
     sigmaFsq = sigmaF**2
     shape = np.shape(cvImage)
+    print (shape)
     m,n = shape[0],shape[1]
     w = np.zeros((m*n,m*n))
     #dist_exponent_mat = np.zeros((m*n,m*n))

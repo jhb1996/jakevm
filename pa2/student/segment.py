@@ -425,8 +425,8 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
             closely each pair of pixels is connected
     
     """
-    sigmaXsq = sigmaX**2
-    sigmaFsq = sigmaF**2
+    sigmaXsq = sigmaX#**2
+    sigmaFsq = sigmaF#**2
     shape = np.shape(cvImage)
     m,n = shape[0],shape[1]
     w = np.zeros((m*n,m*n))
@@ -444,24 +444,6 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
     #raise it all to an exponent
     #reshape it into a 1*n*3 and stick it in i
     
-    
-    # o=-1
-    # for i in range (m*n):
-    #     p = i%n
-    #     if i%n == 0:
-    #         o+=1
-    #     k = -1
-    #     for j in range (m*n):
-    #         l = j%n
-    #         if j%n == 0:
-    #             k+=1
-    #         dist = np.linalg.norm(np.array([o,p])-np.array([k,l]))
-    #         if dist <= r:
-    #             x_exponent = (-1*dist)/sigmaXsq #distance between all j,k and i
-    #             c_exponent = (-1*np.linalg.norm(cvImage[o][p]-cvImage[k][l]))/sigmaFsq
-    #             entry   = np.exp(x_exponent)*np.exp(c_exponent)
-    #             w[i][j] = entry
-    # return w 
 
     o=-1
     for i in range (m*n):

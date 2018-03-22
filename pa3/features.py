@@ -321,10 +321,10 @@ class MOPSFeatureDescriptor(FeatureDescriptor):
             # TODO-BLOCK-BEGIN
             angle = np.deg2rad(f.angle) #= orientationImage[y][x]
             response = f.response #= harrisImage[y][x]
-            T1 = transformations.get_trans_mx(np.array([-y,-x,0]))
+            T1 = transformations.get_trans_mx(np.array([-x,-y,0]))
             R  = transformations.get_rot_mx(0, 0, -angle)
             S  = transformations.get_scale_mx(.2, .2, 0)
-            T2 = transformations.get_trans_mx(np.array([4,-4,0]))
+            T2 = transformations.get_trans_mx(np.array([4,4,0]))
             four_x_four=np.dot(np.dot(np.dot(T2, S), R),T1)
             
             transMx = four_x_four[0:2, [0, 1, 3]]

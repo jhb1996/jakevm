@@ -339,7 +339,8 @@ class MOPSFeatureDescriptor(FeatureDescriptor):
             # define as less than 1e-10) then set the descriptor
             # vector to zero. Lastly, write the vector to desc.
             # TODO-BLOCK-BEGIN
-            desc=destImage/np.linalg.norm(destImage)
+            print (np.linalg.norm(destImage))
+            #desc=destImage/np.linalg.norm(destImage)
             # TODO-BLOCK-END
 
         return desc

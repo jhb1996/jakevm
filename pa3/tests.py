@@ -120,7 +120,7 @@ class HKD3(HKD2):
     return loaded['c']
 HKD=HKD3()
 
-#try_this(3, HKD.detectKeypoints, d, compare_cv2_points, image)
+try_this(3, HKD.detectKeypoints, d, compare_cv2_points, image)
 
 #try_this(4, SFD.describeFeatures, loaded['e'], compare_array, image, d)
 

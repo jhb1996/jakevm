@@ -325,8 +325,11 @@ class MOPSFeatureDescriptor(FeatureDescriptor):
             R  = transformations.get_rot_mx(0, 0, -angle)
             S  = transformations.get_scale_mx(.2, .2, 0)
             T2 = transformations.get_trans_mx(np.array([4,-4,0]))
-            transMx=np.dot(np.dot(np.dot(T2, S), R),T1)
+            four_x_four=np.dot(np.dot(np.dot(T2, S), R),T1)
             
+            transMx = four_x_four[0:2, [0, 1, 3]]
+            
+            print(transMx)
             # row_counter = -1
             # for a in range(int(y)-20,int(y)+21):
             #     row_counter +=1 

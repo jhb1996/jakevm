@@ -344,7 +344,7 @@ class MOPSFeatureDescriptor(FeatureDescriptor):
             if std**2 < 1e-10:
                 desc = np.zeros(np.shape(destImage))
             else:
-                desc=(destImage-np.mean(destImage))/np.std(destImage)
+                desc=(destImage-np.mean(destImage))/std
             
             
             # TODO-BLOCK-END

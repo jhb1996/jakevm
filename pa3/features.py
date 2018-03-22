@@ -288,7 +288,7 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
                     if inbounds((5,5), (a,b)):
                         desc[i][counter] = grayImage[a][b]
                     else:
-                        desc[i] = 0
+                        desc[i][counter] = 0
                     
             
             #windowRow = padded[y+2:y+7,x+2:x+7].flatten()

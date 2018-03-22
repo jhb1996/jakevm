@@ -281,7 +281,7 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
             # sampled centered on the feature point. Store the descriptor
             # as a row-major vector. Treat pixels outside the image as zero.
             # TODO-BLOCK-BEGIN
-            windowRow = padded[x+2:x+7,y+2,y+7].flatten()
+            windowRow = padded[x+2:x+7,y+2:y+7].flatten()
             desc[i]=windowRow
             # TODO-BLOCK-END
 

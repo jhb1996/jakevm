@@ -269,11 +269,6 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         desc = np.zeros((len(keypoints), 5 * 5))
 
-        ## I added this
-        x,y = np.shape(grayImage)
-        #padded = np.zeros((x+5+1, y+5+1))
-        #padded[math.floor(5/2)+1:x+5/2+1, (5/2)+1:y+math.floor(5/2)+1] = grayImage
-        ##
         for i, f in enumerate(keypoints):
             x, y = f.pt
 
@@ -289,11 +284,6 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
                         desc[i][counter] = grayImage[a][b]
                     else:
                         desc[i][counter] = 0
-                    
-            
-            #windowRow = padded[y+2:y+7,x+2:x+7].flatten()
-            #desc[i]=windowRow
-            # TODO-BLOCK-END
 
         return desc
 
@@ -325,23 +315,41 @@ class MOPSFeatureDescriptor(FeatureDescriptor):
             # from each pixel in the 40x40 rotated window surrounding
             # the feature to the appropriate pixels in the 8x8 feature
             # descriptor image.
-            transMx = np.zeros((2, 3))
 
+            transMx = np.zeros((2, 3))
+            x, y = f.pt
             # TODO-BLOCK-BEGIN
-            raise Exception("TODO in features.py not implemented")
+            angle = np.deg2rad(f.angle) #= orientationImage[y][x]
+            response = f.response #= harrisImage[y][x]
+            T1 = transformations.get_trans_mx(np.array([-x,-y,0]))
+            R  = transformations.get_rot_mx(0, 0, -angle)
+            S  = transformations.get_scale_mx(.2, .2, 0)
+            T2 = transformations.get_trans_mx(np.array([4,-4,0]))
+            transMx=np.dot(np.dot(np.dot(T2, S), R),T1)
+            
+            # row_counter = -1
+            # for a in range(int(y)-20,int(y)+21):
+            #     row_counter +=1 
+            #     column_counter = -1
+            #     for b in range (int(x)-20,int(x)+21):
+            #         column_counter +=1
+            #         if (a%5==0 and b%5==0):
+            #             if inbounds(np.shape(grayImage), (a,b)):
+            #                 desc[row_counter][column_counter] = grayImage[a][b]
+            #             else:
+            #                 desc[row_counter][column_counter] = 0
             # TODO-BLOCK-END
 
             # Call the warp affine function to do the mapping
             # It expects a 2x3 matrix
             destImage = cv2.warpAffine(grayImage, transMx,
                 (windowSize, windowSize), flags=cv2.INTER_LINEAR)
-
             # TODO 6: Normalize the descriptor to have zero mean and unit 
             # variance. If the variance is negligibly small (which we 
             # define as less than 1e-10) then set the descriptor
             # vector to zero. Lastly, write the vector to desc.
             # TODO-BLOCK-BEGIN
-            raise Exception("TODO in features.py not implemented")
+            desc=destImage/np.linalg.norm(destImage)
             # TODO-BLOCK-END
 
         return desc
@@ -468,10 +476,11 @@ class SSDFeatureMatcher(FeatureMatcher):
         # feature in the second image.
         # TODO-BLOCK-BEGIN
         num_features, num_feature_dims = desc1.shape
-        for f1 in desc1:
-            for f2 in desc2:
-                ssd = np.sum((f1 - f2)**2) #scipy.spatial.dustance cdit --- argmin
-                #m = DMatch(queryIdx = , trainIdx, distance)
+        dists = spatial.distance.cdist(desc1, desc2)
+        mins = np.argmin(dists, axis=1)
+        for i in range(len(mins)):
+            m = DMatch(queryIdx = i, trainIdx = mins[i], distance = np.amin(dists[i]))
+            matches.append(m)
         # TODO-BLOCK-END
 
         return matches

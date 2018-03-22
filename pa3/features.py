@@ -272,7 +272,7 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
         ## I added this
         x,y = np.shape(grayImage)
         padded = np.zeros((x+5+1, y+5+1))
-        padded[5/2+1:x+5/2+1, 5/2+1:y+5/2+1] = grayImage
+        padded[math.floor(5/2)+1:x+5/2+1, (5/2)+1:y+math.floor(5/2)+1] = grayImage
         ##
         for i, f in enumerate(keypoints):
             x, y = f.pt

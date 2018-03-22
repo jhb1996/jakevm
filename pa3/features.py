@@ -114,7 +114,7 @@ class HarrisKeypointDetector(KeypointDetector):
 
         det_mat = np.multiply(xsq_masked, ysq_masked) - np.multiply(xTy_masked, xTy_masked)
         trace_mat = xsq_masked + ysq_masked
-        trace_mat_sq_T_point1 = np.square(trace_mat)+.1
+        trace_mat_sq_T_point1 = np.square(trace_mat)*.1
         harrisImage = det_mat - trace_mat_sq_T_point1
         # for i in range(height):
         #     for j in range (width):

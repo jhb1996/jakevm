@@ -161,19 +161,21 @@ class HarrisKeypointDetector(KeypointDetector):
 
         # TODO 2: Compute the local maxima image
         # TODO-BLOCK-BEGIN
-        x,y = np.shape(harrisImage)
-        padded = np.zeros((x+math.floor(7/2)+1, y+math.floor(7/2)+1))
-        #print (math.floor(7/2)+1)#, int(x)+(7/2)+1, (7/2)+1, int(y)+(7/2)+1)
-        padded[math.floor(7/2)+1:int(x)+math.floor(7/2)+1, math.floor(7/2)+1:int(y)+math.floor(7/2)+1] = harrisImage
-        print (padded)
-        for i in range (x):
-            for j in range (y):
-                seven_by_seven = padded[i:7,j:7]
-                m = np.amax(seven_by_seven)
-                if padded[i+3][j+3] == m:
-                    destImage[i][j] = True
-                else:
-                    destImage[i][j] = False
+        
+        maxes = ndimage.filters.maximum_filter(harrisImage,7,mode='constant', cval = -1e100)
+        destImage == harrisImage
+        # x,y = np.shape(harrisImage)
+        # padded = np.zeros((x+math.floor(7/2)+1, y+math.floor(7/2)+1))
+        # padded[math.floor(7/2)+1:int(x)+math.floor(7/2)+1, math.floor(7/2)+1:int(y)+math.floor(7/2)+1] = harrisImage
+        # print (padded)
+        # for i in range (x):
+        #     for j in range (y):
+        #         seven_by_seven = padded[i:7,j:7]
+        #         m = np.amax(seven_by_seven)
+        #         if padded[i+3][j+3] == m:
+        #             destImage[i][j] = True
+        #         else:
+        #             destImage[i][j] = False
         # TODO-BLOCK-END
         return destImage
 

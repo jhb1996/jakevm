@@ -285,7 +285,7 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
             for a in range(int(y)-2,int(y)+3):
                 for b in range (int(x)-2,int(x)+3):
                     counter +=1
-                    if inbounds((5,5), (a,b)):
+                    if inbounds(np.shape(grayImage), (a,b)):
                         desc[i][counter] = grayImage[a][b]
                     else:
                         desc[i][counter] = 0

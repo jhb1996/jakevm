@@ -158,7 +158,7 @@ class HarrisKeypointDetector(KeypointDetector):
         # TODO 2: Compute the local maxima image
         # TODO-BLOCK-BEGIN
         x,y = np.shape(harrisImage)
-        padded = np.zeros((x+7/2+1, y+7+1))
+        padded = np.zeros((x+math.floor(7/2)+1, y+math.floor(7/2)+1))
         #print (math.floor(7/2)+1)#, int(x)+(7/2)+1, (7/2)+1, int(y)+(7/2)+1)
         padded[math.floor(7/2)+1:int(x)+math.floor(7/2)+1, math.floor(7/2)+1:int(y)+math.floor(7/2)+1] = harrisImage
         print (padded)

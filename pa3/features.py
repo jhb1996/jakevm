@@ -282,8 +282,8 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
             # as a row-major vector. Treat pixels outside the image as zero.
             # TODO-BLOCK-BEGIN
             counter = -1
-            for a in range(y-2,y+3):
-                for b in range (x-2,x+3):
+            for a in range(int(y)-2,int(y)+3):
+                for b in range (int(x)-2,int(x)+3):
                     counter +=1
                     if inbounds((5,5), (a,b)):
                         desc[i][counter] = grayImage[a][b]

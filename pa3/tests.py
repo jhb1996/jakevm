@@ -124,5 +124,5 @@ try_this(3, HKD.detectKeypoints, d, compare_cv2_points, image)
 
 try_this(4, SFD.describeFeatures, loaded['e'], compare_array, image, d)
 
-#try_this('5 and/or 6', MFD.describeFeatures, loaded['f'], compare_array, image, d)
+try_this('5 and/or 6', MFD.describeFeatures, loaded['f'], compare_array, image, d)
 

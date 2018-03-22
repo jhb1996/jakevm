@@ -209,11 +209,11 @@ class HarrisKeypointDetector(KeypointDetector):
                 # f.angle to the orientation in degrees and f.response to
                 # the Harris score
                 # TODO-BLOCK-BEGIN
-                f.pt = (y, x)
+                f.pt = (x, y)
                 # Dummy size
                 f.size = 10
-                f.angle = orientationImage[y][x]
-                f.response = harrisImage[y][x]
+                f.angle = orientationImage[x][y]
+                f.response = harrisImage[x][y]
                 # TODO-BLOCK-END
 
                 features.append(f)

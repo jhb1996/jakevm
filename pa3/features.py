@@ -270,7 +270,7 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
         desc = np.zeros((len(keypoints), 5 * 5))
 
         ## I added this
-        x,y = np.shape(harrisImage)
+        x,y = np.shape(grayImage)
         padded = np.zeros((x+5+1, y+5+1))
         padded[5/2+1:x+5/2+1, 5/2+1:y+5/2+1] = grayImage
         ##

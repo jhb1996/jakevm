@@ -271,8 +271,8 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
 
         ## I added this
         x,y = np.shape(grayImage)
-        padded = np.zeros((x+5+1, y+5+1))
-        padded[math.floor(5/2)+1:x+5/2+1, (5/2)+1:y+math.floor(5/2)+1] = grayImage
+        #padded = np.zeros((x+5+1, y+5+1))
+        #padded[math.floor(5/2)+1:x+5/2+1, (5/2)+1:y+math.floor(5/2)+1] = grayImage
         ##
         for i, f in enumerate(keypoints):
             x, y = f.pt
@@ -281,8 +281,18 @@ class SimpleFeatureDescriptor(FeatureDescriptor):
             # sampled centered on the feature point. Store the descriptor
             # as a row-major vector. Treat pixels outside the image as zero.
             # TODO-BLOCK-BEGIN
-            windowRow = padded[y+2:y+7,x+2:x+7].flatten()
-            desc[i]=windowRow
+            counter = -1
+            for a in range(y-2,y+3):
+                for b in range (x-2,x+3):
+                    counter +=1
+                    if inbounds((5,5), (a,b)):
+                        desc[i][counter] = grayImage[a][b]
+                    else:
+                        desc[i] = 0
+                    
+            
+            #windowRow = padded[y+2:y+7,x+2:x+7].flatten()
+            #desc[i]=windowRow
             # TODO-BLOCK-END
 
         return desc

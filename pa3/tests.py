@@ -75,9 +75,9 @@ grayImage = cv2.cvtColor(image.astype(np.float32)/255.0, cv2.COLOR_BGR2GRAY)
 def compute_and_save():
     (a,b) = HKD.computeHarrisValues(grayImage) # Todo1
     c = HKD.computeLocalMaxima(a) # Todo2
-    #d = HKD.detectKeypoints(image) # Todo3
-    #e = SFD.describeFeatures(image, d) # Todo 4
-    #f = MFD.describeFeatures(image, d) # Todo 5,6
+    d = HKD.detectKeypoints(image) # Todo3
+    e = SFD.describeFeatures(image, d) # Todo 4
+    f = MFD.describeFeatures(image, d) # Todo 5,6
     # No test for Todo 7 or 8
     d_proc = pickle_cv2(d)
     np.savez('resources/arrays',a=a,b=b,c=c,d_proc=d_proc,e=e,f=f)
@@ -104,7 +104,7 @@ This is not the script used by the autograder.
 loaded = np.load('resources/arrays.npz')
 d = unpickle_cv2(loaded['d_proc'])
 
-try_this(1, HKD.computeHarrisValues, [loaded['a'],loaded['b']], compare_array, grayImage)
+#try_this(1, HKD.computeHarrisValues, [loaded['a'],loaded['b']], compare_array, grayImage)
 
 # patch HKD so future tests won't fail because the last test failed
 class HKD2(features.HarrisKeypointDetector):
@@ -112,7 +112,7 @@ class HKD2(features.HarrisKeypointDetector):
     return loaded['a'],loaded['b']
 HKD=HKD2()
 
-try_this(2, HKD.computeLocalMaxima, loaded['c'], compare_array, loaded['a'])
+#try_this(2, HKD.computeLocalMaxima, loaded['c'], compare_array, loaded['a'])
 
 # patch HKD so future tests won't fail because the last test failed
 class HKD3(HKD2):

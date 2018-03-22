@@ -342,9 +342,9 @@ class MOPSFeatureDescriptor(FeatureDescriptor):
             #print (np.linalg.norm(destImage))
             std = np.std(destImage)
             if std**2 < 1e-10:
-                desc = np.zeros(np.shape(destImage))
+                desc[i] = np.zeros(np.shape(destImage))
             else:
-                desc=(destImage-np.mean(destImage))/std
+                desc[i] =(destImage-np.mean(destImage))/std
             
             
             # TODO-BLOCK-END

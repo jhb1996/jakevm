@@ -141,7 +141,7 @@ class HarrisKeypointDetector(KeypointDetector):
         #         trace = numpy.linalg.trace(H)
         #         harrisImage[i][j] = det - .1*(trace^2)
         #divided = np.divide(ydir,xdir)
-        orientationImage = np.degree(np.arctan2(ydir,xdir)) #check sizes to see if they match up otherwise cut two off the edges
+        orientationImage = np.rad2deg(np.arctan2(ydir,xdir)) #check sizes to see if they match up otherwise cut two off the edges
         # TODO-BLOCK-END
 
         return harrisImage, orientationImage

@@ -328,19 +328,6 @@ class MOPSFeatureDescriptor(FeatureDescriptor):
             four_x_four=np.dot(np.dot(np.dot(T2, S), R),T1)
             
             transMx = four_x_four[0:2, [0, 1, 3]]
-            
-            print(transMx)
-            # row_counter = -1
-            # for a in range(int(y)-20,int(y)+21):
-            #     row_counter +=1 
-            #     column_counter = -1
-            #     for b in range (int(x)-20,int(x)+21):
-            #         column_counter +=1
-            #         if (a%5==0 and b%5==0):
-            #             if inbounds(np.shape(grayImage), (a,b)):
-            #                 desc[row_counter][column_counter] = grayImage[a][b]
-            #             else:
-            #                 desc[row_counter][column_counter] = 0
             # TODO-BLOCK-END
 
             # Call the warp affine function to do the mapping

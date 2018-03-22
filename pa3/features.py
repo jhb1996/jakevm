@@ -163,7 +163,7 @@ class HarrisKeypointDetector(KeypointDetector):
         # TODO-BLOCK-BEGIN
         
         maxes = ndimage.filters.maximum_filter(harrisImage,7,mode='constant', cval = -1e100)
-        destImage == harrisImage
+        destImage = maxes == harrisImage
         # x,y = np.shape(harrisImage)
         # padded = np.zeros((x+math.floor(7/2)+1, y+math.floor(7/2)+1))
         # padded[math.floor(7/2)+1:int(x)+math.floor(7/2)+1, math.floor(7/2)+1:int(y)+math.floor(7/2)+1] = harrisImage

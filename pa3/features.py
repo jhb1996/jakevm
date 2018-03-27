@@ -476,7 +476,7 @@ class SSDFeatureMatcher(FeatureMatcher):
         dists = spatial.distance.cdist(desc1, desc2)
         mins = np.argmin(dists, axis=1)
         for i in range(len(mins)):
-            m = cv2.DMatch(queryIdx = i, trainIdx = mins[i], distance = np.amin(dists[i]))
+            m = cv2.DMatch(_queryIdx = i, _trainIdx = mins[i], _distance = np.amin(dists[i]))
             matches.append(m)
         # TODO-BLOCK-END
 
@@ -533,7 +533,7 @@ class RatioFeatureMatcher(FeatureMatcher):
             
             ratioDist = bestDist/float(secondBestDist)
                         
-            m = cv2.DMatch(queryIdx = i, trainIdx = mins[i], distance = ratioDist)
+            m = cv2.DMatch(_queryIdx = i, _trainIdx = mins[i], _distance = ratioDist)
             matches.append(m)
         
         # TODO-BLOCK-END

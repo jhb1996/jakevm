@@ -529,7 +529,7 @@ class RatioFeatureMatcher(FeatureMatcher):
             #alter distsi to change the previous min to a really big number
             distsi[mins[i]] = float('inf')
             secondBestMatch = np.argmin(distsi)
-            bestDist =  np.amin(distsi)
+            secondBestDist =  np.amin(distsi)
             
             ratioDist = bestDist/float(secondBestDist)
                         

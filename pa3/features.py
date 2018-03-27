@@ -519,7 +519,23 @@ class RatioFeatureMatcher(FeatureMatcher):
         # feature in the second image.
         # You don't need to threshold matches in this function
         # TODO-BLOCK-BEGIN
-        raise Exception("TODO in features.py not implemented")
+        num_features, num_feature_dims = desc1.shape
+        dists = spatial.distance.cdist(desc1, desc2)
+        mins = np.argmin(dists, axis=1)
+        for i in range(len(mins)):
+            distsi = dists[i]
+            bestMatch = mins[i]
+            bestDist =  np.amin(distsi)
+            #alter distsi to change the previous min to a really big number
+            distsi[mins[i]] = sys.maxsize
+            secondBestMatch = np.argmin(distsi)
+            bestDist =  np.amin(distsi)
+            
+            ratioDist = bestDist/float(secondBestDist)
+                        
+            m = DMatch(queryIdx = i, trainIdx = mins[i], distance = ratioDist)
+            matches.append(m)
+        
         # TODO-BLOCK-END
 
         return matches

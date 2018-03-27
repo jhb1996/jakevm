@@ -28,5 +28,5 @@ if __name__ == "__main__":
     T2 = transformations.get_trans_mx(np.array([4,-4,0]))
     four_x_four=np.dot(np.dot(np.dot(T2, S), R),T1)
             
-    transMx = (four_x_four[0:2, [0, 1, 3]])
+    transMx = four_x_four[0:2, [0, 1, 3]]
     print(transMx)

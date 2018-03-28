@@ -102,45 +102,20 @@ class HarrisKeypointDetector(KeypointDetector):
         # TODO-BLOCK-BEGIN
         xdir = scipy.ndimage.sobel(srcImage, axis=1, mode="reflect")
         xsq = np.square(xdir)
-        # print (height,width)
-        # print (np.shape(xdir))
+
         ydir = scipy.ndimage.sobel(srcImage, axis=0, mode="reflect")
         ysq = np.square(ydir)
         xTy = np.multiply(xdir, ydir)
         
-        xsq_masked = ndimage.filters.gaussian_filter(xsq, .5) #how do I choose to make it 5 by 5
-        ysq_masked = ndimage.filters.gaussian_filter(ysq, .5) #how do I choose to make it 5 by 5
-        xTy_masked = ndimage.filters.gaussian_filter(xTy, .5) #how do I choose to make it 5 by 5
+        xsq_masked = ndimage.filters.gaussian_filter(xsq, .5)
+        ysq_masked = ndimage.filters.gaussian_filter(ysq, .5)
+        xTy_masked = ndimage.filters.gaussian_filter(xTy, .5)
 
         det_mat = np.multiply(xsq_masked, ysq_masked) - np.multiply(xTy_masked, xTy_masked)
         trace_mat = xsq_masked + ysq_masked
         trace_mat_sq_T_point1 = np.square(trace_mat)*.1
         harrisImage = det_mat - trace_mat_sq_T_point1
-        # for i in range(height):
-        #     for j in range (width):
-        #         H = np.zeros((2,2))
-        #         H[0][0] = xsq_masked[i][j]
-        #         H[0][1] = xTy_masked[i][j]
-        #         H[1][0] = xTy_masked[i][j]
-        #         H[1][1] = ysq_masked[i][j]
-        #         det = np.linalg.det(H)
-        #         trace = np.trace(H)
-        #         harrisImage[i][j] = det - .1*(trace**2)
-        
-        # window = ndimage.filters.gaussian_filter(25, .5)
-        # print ("window is")
-        # print (window)
-        # for i in range(height-3):
-        #     for j in range (width-3):
-        #         H = np.zeros((2,2))
-        #         H[0][0] = np.multiply(xdir[i+3:i+8, j+3:j+8],window)
-        #         H[0][1] = np.multiply(xsq[i+3:i+8, j+3:j+8],window)
-        #         H[1][0] = np.multiply(ydir[i+3:i+8, j+3:j+8],window)
-        #         H[1][1] = np.multiply(ysq[i+3:i+8, j+3:j+10],window)
-        #         det = numpy.linalg.det(H)
-        #         trace = numpy.linalg.trace(H)
-        #         harrisImage[i][j] = det - .1*(trace^2)
-        #divided = np.divide(ydir,xdir)
+
         orientationImage = np.rad2deg(np.arctan2(ydir,xdir)) #check sizes to see if they match up otherwise cut two off the edges
         # TODO-BLOCK-END
 

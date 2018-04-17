@@ -35,7 +35,7 @@ def compute_photometric_stereo_impl(lights, images):
     print (np.shape(np.transpose(lights)))
     print (np.shape(np.dot(lights, np.transpose(lights))))
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
-    LLinv_t_L = np.dot(LLinv, L)
+    LLinv_t_L = np.dot(LLinv, lights)
     G = np.dot(np.dot(inv,lights),I)
     
     np.norm()
@@ -74,8 +74,8 @@ def pyrdown_impl(image):
     #scipy.ndimage.filters.correlate()
     shape = np.shape(image)
     kern = np.array([.0625, .24, .375, .24, .0625])
-    fltrd1 = cv2.filter2D(src=image, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
-    fltrd2 = cv2.filter2D(src=fltrd1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
+    fltrd1 = cv2.filter2D(src=image, depth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
+    fltrd2 = cv2.filter2D(src=fltrd1, depth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
     if len(shape) == 2:
         down = fltrd2[::2,::2]
     else: 
@@ -108,14 +108,15 @@ def pyrup_impl(image):
     """
     shape = np.shape(image)
     mixed = np.zeros((shape[0]*2,shape[1]*2))
+    print ("shape is", shape)
     if len(shape) == 2:
         mixed[::2,::2] = image
     else: 
         mixed[::2,::2, :] = image
     
     kern = np.array([.125, .5, .75, .5, .125])
-    fltrd1 = cv2.filter2D(src=mixed, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
-    fltrd2 = cv2.filter2D(src=fltrd1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
+    fltrd1 = cv2.filter2D(src=mixed, depth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
+    fltrd2 = cv2.filter2D(src=fltrd1, depth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
     return fltrd2
 
 
@@ -180,7 +181,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     Output:
         points -- 2 x 2 x 3 array of 3D points
     """
-    Kinv = np.linalg.inv(k)
+    Kinv = np.linalg.inv(K)
     m4x3 = np.zeros(4,3)
     m4x3[0] = np.multiply(depth, np.dot(Kinv, [0,0,1]))
     m4x3[1] = np.multiply(depth, np.dot(Kinv, [width,0,1]))

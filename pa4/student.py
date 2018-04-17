@@ -113,7 +113,7 @@ def pyrup_impl(image):
         mixed[::2,::2] = image
     else: 
         mixed[::2,::2, :] = image
-    
+    #
     kern = np.array([.125, .5, .75, .5, .125])
     fltrd1 = cv2.filter2D(src=mixed, ddepth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
     fltrd2 = cv2.filter2D(src=fltrd1, ddepth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)

@@ -74,8 +74,8 @@ def pyrdown_impl(image):
     #scipy.ndimage.filters.correlate()
     shape = np.shape(image)
     kern = np.array([.0625, .24, .375, .24, .0625])
-    fltrd1 = cv2.filter2D(src=image, depth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
-    fltrd2 = cv2.filter2D(src=fltrd1, depth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
+    fltrd1 = cv2.filter2D(src=image, ddepth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
+    fltrd2 = cv2.filter2D(src=fltrd1, ddepth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
     if len(shape) == 2:
         down = fltrd2[::2,::2]
     else: 
@@ -115,8 +115,8 @@ def pyrup_impl(image):
         mixed[::2,::2, :] = image
     
     kern = np.array([.125, .5, .75, .5, .125])
-    fltrd1 = cv2.filter2D(src=mixed, depth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
-    fltrd2 = cv2.filter2D(src=fltrd1, depth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
+    fltrd1 = cv2.filter2D(src=mixed, ddepth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
+    fltrd2 = cv2.filter2D(src=fltrd1, ddepth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
     return fltrd2
 
 

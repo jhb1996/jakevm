@@ -112,7 +112,7 @@ def pyrup_impl(image):
         mixed = np.zeros((shape[0]*2,shape[1]*2))
         mixed[::2,::2] = image
     else:
-        mixed = np.zeros((shape[0]*2,shape[1]*2), shape[2])
+        mixed = np.zeros((shape[0]*2,shape[1]*2, shape[2]))
         mixed[::2,::2, :] = image
     #
     kern = np.array([.125, .5, .75, .5, .125])

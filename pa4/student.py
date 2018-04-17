@@ -182,7 +182,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
         points -- 2 x 2 x 3 array of 3D points
     """
     Kinv = np.linalg.inv(K)
-    m4x3 = np.zeros(4,3)
+    m4x3 = np.zeros((4,3))
     m4x3[0] = np.multiply(depth, np.dot(Kinv, [0,0,1]))
     m4x3[1] = np.multiply(depth, np.dot(Kinv, [width,0,1]))
     m4x3[2] = np.multiply(depth, np.dot(Kinv, [0,height,1]))

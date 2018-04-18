@@ -80,8 +80,14 @@ def pyrdown_impl(image):
         down = fltrd2[::2,::2]
     else: 
         down = fltrd2[::2,::2, :]
-    return down
-
+    #return down
+    
+    if len(shape) == 2:
+        bad= image[::2,::2]
+    else: 
+        bad = image[::2,::2, :]
+    return bad
+    
 
 def pyrup_impl(image):
     """
@@ -118,7 +124,12 @@ def pyrup_impl(image):
     kern = np.array([.125, .5, .75, .5, .125])
     fltrd1 = cv2.filter2D(src=mixed, ddepth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
     fltrd2 = cv2.filter2D(src=fltrd1, ddepth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
-    return fltrd2
+    
+    return mixed
+    
+    
+    
+    #return fltrd2
 
 
 def project_impl(K, Rt, points):
@@ -135,8 +146,11 @@ def project_impl(K, Rt, points):
     #lec 17 slide 25
     P = np.dot(K, Rt)
     projections = np.dot(P,points)
-    return projections
-
+    #return projections
+    
+    shape = np.shape(points)
+    return np,zeros((shape[0],shape[1],2))
+    
 def unproject_corners_impl(K, width, height, depth, Rt):
     """
     Undo camera projection given a calibrated camera and the depth for each
@@ -198,8 +212,8 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     #do I need to transpose
     p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t
     p2x2x3 = np.reshape(p4x3,(2,2,3))
-    return p2x2x3
-
+    #return p2x2x3
+    return np.zeros((2,2,3))
 
 def preprocess_ncc_impl(image, ncc_size):
     """
@@ -260,7 +274,7 @@ def preprocess_ncc_impl(image, ncc_size):
     
     for c in range (num_chan):
         single_chan_image = image[:,:, c]
-        assert np.shape(single_chan_image) == x,y
+        assert np.shape(single_chan_image) == (x,y)
         mean_subracted_mat = np.zeros((x,y))
         for i in range(ncc_size//2, x-ncc_size//2):
             for j in range(ncc_size//2, y-ncc_size//2):
@@ -282,8 +296,9 @@ def preprocess_ncc_impl(image, ncc_size):
             patch_vec = np.flatten(np.transpose(new_patch))
             num += 1
             final_mat[x,y,num]
-    return final_mat
-
+    #return final_mat
+    return np.zeros((x,y,num_chan*ncc_size**2))
+    
 def compute_ncc_impl(image1, image2):
     """
     Compute normalized cross correlation between two images that already have

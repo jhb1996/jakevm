@@ -38,6 +38,7 @@ def compute_photometric_stereo_impl(lights, images):
     LLinv_t_L = np.dot(LLinv, lights)
     print ("LLinv_t_L", np.shape(LLinv_t_L))
     print ("images", np.shape(images))
+    print (images)
     G = np.dot(LLinv_t_L,images)
     
     albedo = np.norm(G, axis = 0)

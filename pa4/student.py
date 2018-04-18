@@ -34,17 +34,38 @@ def compute_photometric_stereo_impl(lights, images):
     #print (np.shape(lights))
     #print (np.shape(np.transpose(lights)))
     #print (np.shape(np.dot(lights, np.transpose(lights))))
-    LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
-    LLinv_t_L = np.dot(LLinv, lights)
-    print ("LLinv_t_L", np.shape(LLinv_t_L))
-    print ("images", np.shape(images))
-    print (images)
-    G = np.dot(LLinv_t_L,images)
+    
+    shape_l = np.shape(lights)
+    shape_i = np.shape(images)
+    
+    rImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    bImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    gImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    if len(shape_i) == 4:
+        for num, pic in enumerate(images):
+            rpic = pic[:,:,0] #np.mean(images, axis = 2)
+            bpic = pic[:,:,1] #np.mean(images, axis = 2)
+            gpic = pic[:,:,2] #np.mean(images, axis = 2)
+            rflat = rpic.flatten()
+            bflat = bpic.flatten()
+            gflat = gpic.flatten()
+            rImat[num] = rflat
+            rImat[num] = bflat
+            rImat[num] = gflat
+            
+        for single_chan_image in [rImat,rImat,rImat]:       
+            #rimage = images[:,:,0,:] #np.mean(images, axis = 2)
+            LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
+            LLinv_t_L = np.dot(LLinv, lights)
+            print ("LLinv_t_L", np.shape(LLinv_t_L))
+            print ("images", np.shape(single_chan_image))
+            print (single_chan_image)
+            G = np.dot(LLinv_t_L,single_chan_image)
     
     albedo = np.norm(G, axis = 0)
     normals = np.divide(G, albedo)
     
-    return normal
+    return albedo, normal
 
 def pyrdown_impl(image):
     """

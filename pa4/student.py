@@ -62,7 +62,7 @@ def compute_photometric_stereo_impl(lights, images):
     albedo = np.linalg.norm(G, axis = 0)
     normals = np.divide(G, albedo)
     
-    return albedo, normal
+    return albedo, normals
 
 def pyrdown_impl(image):
     """

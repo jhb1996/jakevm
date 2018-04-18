@@ -164,15 +164,18 @@ def project_impl(K, Rt, points):
     """
     
     #lec 17 slide 25
+    
+    #am I projecting from the real world to an image or from an image to the real world?
+    
     #print ("shape K =", np.shape(K))
     #print ("shape Rt =", np.shape(Rt))
     P = np.dot(K, Rt)
     print ("shape P =", np.shape(P))
     print ("shape points =", np.shape(points))
-
+    print ("points", points)
     #shape = np.shape(points)
     
-    projections = np.dot(P,points)
+    projections = np.dot(P,points) #do I invert P?
     
 
     return projections
@@ -239,7 +242,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     Rinv[0:3, 0:3] = tpose_R
     #handles the different ps all at once with a matrix multiplication
     #do I need to transpose
-    p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t
+    p4x3 = np.dot(tpose_R, np.transpose(m4x3)) #- tpose_R_t_t#add back in after
     p2x2x3 = np.reshape(p4x3,(2,2,3))
     #return p2x2x3
     return np.zeros((2,2,3))

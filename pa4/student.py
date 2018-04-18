@@ -59,7 +59,7 @@ def compute_photometric_stereo_impl(lights, images):
     print ("images", np.shape(Imat))
     G = np.dot(LLinv_t_L,Imat)
     
-    albedo = np.norm(G, axis = 0)
+    albedo = np.linalg.norm(G, axis = 0)
     normals = np.divide(G, albedo)
     
     return albedo, normal

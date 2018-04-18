@@ -242,7 +242,12 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     Rinv[0:3, 0:3] = tpose_R
     #handles the different ps all at once with a matrix multiplication
     #do I need to transpose
-    p4x3 = np.dot(tpose_R, np.transpose(m4x3)) #- tpose_R_t_t#add back in after
+    print (tpose_R)
+    print (Rt[:,4:])
+    print(tpose_R_t_t)
+    print ("shape tpose_R_t_t", tpose_R_t_t)
+    print ("shape tpose_R, np.transpose(m4x3))", tpose_R, np.transpose(m4x3))
+    p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t#add back in after
     p2x2x3 = np.reshape(p4x3,(2,2,3))
     #return p2x2x3
     return np.zeros((2,2,3))

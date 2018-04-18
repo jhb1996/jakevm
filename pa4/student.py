@@ -250,8 +250,8 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     print ("shape tpose_R, np.transpose(m4x3))", tpose_R, np.transpose(m4x3))
     p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t#add back in after
     p2x2x3 = np.reshape(p4x3,(2,2,3))
-    #return p2x2x3
-    return np.zeros((2,2,3))
+    return p2x2x3
+    #return np.zeros((2,2,3))
 
 def preprocess_ncc_impl(image, ncc_size):
     """

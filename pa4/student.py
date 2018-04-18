@@ -164,10 +164,13 @@ def project_impl(K, Rt, points):
     """
     
     #lec 17 slide 25
-    print ("shape K =", np.shape(K))
-    print ("shape K =", np.shape(Rt))
+    #print ("shape K =", np.shape(K))
+    #print ("shape Rt =", np.shape(Rt))
     P = np.dot(K, Rt)
-    shape = np.shape(points)
+    print ("shape P =", np.shape(P))
+    print ("shape points =", np.shape(points))
+
+    #shape = np.shape(points)
     
     projections = np.dot(P,points)
     

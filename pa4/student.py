@@ -36,7 +36,7 @@ def compute_photometric_stereo_impl(lights, images):
     print (np.shape(np.dot(lights, np.transpose(lights))))
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
-    G = np.dot(np.dot(LLinv_t_L,lights),images)
+    G = np.dot(LLinv_t_L,images)
     
     albedo = np.norm(G, axis = 0)
     normals = np.divide(G, albedo)

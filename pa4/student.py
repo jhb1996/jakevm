@@ -55,8 +55,6 @@ def compute_photometric_stereo_impl(lights, images):
             #rimage = images[:,:,0,:] #np.mean(images, axis = 2)
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
-    print ("LLinv_t_L", np.shape(LLinv_t_L))
-    print ("images", np.shape(Imat))
     G = np.dot(LLinv_t_L,Imat)
     
     albedo = np.linalg.norm(G, axis = 0)
@@ -164,13 +162,20 @@ def project_impl(K, Rt, points):
     Output:
         projections -- height x width x 2 array of 2D projections
     """
-    #lec 17 slide 25
-    P = np.dot(K, Rt)
-    projections = np.dot(P,points)
-    #return projections
     
+    #lec 17 slide 25
+    print ("shape K =", np.shape(K))
+    print ("shape K =", np.shape(Rt))
+    P = np.dot(K, Rt)
     shape = np.shape(points)
-    return np,zeros((shape[0],shape[1],2))
+    
+    projections = np.dot(P,points)
+    
+
+    return projections
+    
+    #shape = np.shape(points)
+    #return np,zeros((shape[0],shape[1],2))
     
 def unproject_corners_impl(K, width, height, depth, Rt):
     """

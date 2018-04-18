@@ -36,12 +36,12 @@ def compute_photometric_stereo_impl(lights, images):
     print (np.shape(np.dot(lights, np.transpose(lights))))
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
-    G = np.dot(np.dot(LLinv,lights),images)#checck if this should be LLinv
+    G = np.dot(np.dot(LLinv_t_L,lights),images)
     
-    np.norm()
+    albedo = np.norm(G, axis = 0)
+    normals = np.divide(G, albedo)
     
-    
-    return G
+    return normal
 
 def pyrdown_impl(image):
     """

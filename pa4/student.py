@@ -41,9 +41,9 @@ def compute_photometric_stereo_impl(lights, images):
     Imat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
     #bImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
     #gImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    if len(shape_i) == 4:
-        images = images[:,:,:,0]
     for num, pic in enumerate(images):
+        if len(shape_i) == 4:
+            pic = pic[:,:,0]
         flat = pic.flatten()
             #bflat = bpic.flatten()
             #gflat = gpic.flatten()

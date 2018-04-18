@@ -31,11 +31,13 @@ def compute_photometric_stereo_impl(lights, images):
     
     #how do I avoid doing each pixel by itself
     #can I do inverse LT times I
-    print (np.shape(lights))
-    print (np.shape(np.transpose(lights)))
-    print (np.shape(np.dot(lights, np.transpose(lights))))
+    #print (np.shape(lights))
+    #print (np.shape(np.transpose(lights)))
+    #print (np.shape(np.dot(lights, np.transpose(lights))))
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
+    print ("LLinv_t_L", np.shape(LLinv_t_L))
+    print ("images", np.shape(images))
     G = np.dot(LLinv_t_L,images)
     
     albedo = np.norm(G, axis = 0)

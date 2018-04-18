@@ -47,7 +47,7 @@ def compute_photometric_stereo_impl(lights, images):
         flat = pic.flatten()
             #bflat = bpic.flatten()
             #gflat = gpic.flatten()
-        Imat[num] = rflat
+        Imat[num] = flat
             #rImat[num] = bflat
             #rImat[num] = gflat
             

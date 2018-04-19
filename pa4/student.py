@@ -37,16 +37,16 @@ def compute_photometric_stereo_impl(lights, images):
     shape_l = np.shape(lights)
     N,height,width,num_channels = np.shape(images)
     
-    print ("i shape", (N,height,width,num_channels))
+    #print ("i shape", (N,height,width,num_channels))
     
     rshp_images = np.reshape(images, (N,height*width*num_channels))
     
-    print(np.shape(rshp_images))
+    #print(np.shape(rshp_images))
     
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
-    print ("shape LLinv_t_L =", np.shape(LLinv_t_L))
-    print ("shape rshp_images =", np.shape(rshp_images))
+    #print ("shape LLinv_t_L =", np.shape(LLinv_t_L))
+    #print ("shape rshp_images =", np.shape(rshp_images))
     G = np.dot(LLinv_t_L,rshp_images)
     #print("G shape", np.shape(G))
     #print("G", albedo)
@@ -56,7 +56,7 @@ def compute_photometric_stereo_impl(lights, images):
     Ggrayscale = np.mean(G3chan, axis=2)
     albedo_for_norm = np.linalg.norm(Ggrayscale, axis = 2)
     bools = albedo_for_norm < 1e-7
-    print("albedo shape", np.shape(albedo))
+    #print("albedo shape", np.shape(albedo))
     #print("albedo", albedo)
     
     normals = Ggrayscale/np.maximum(1e-7, albedo_for_norm[:,:,np.newaxis])

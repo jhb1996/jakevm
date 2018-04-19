@@ -277,9 +277,9 @@ def preprocess_ncc_impl(image, ncc_size):
     for i in range(ncc_fl_div2, x-ncc_fl_div2):
         for j in range(ncc_fl_div2, y-ncc_fl_div2):
             print (i,j)
-            mean = np.mean(image[i:i+ncc_size, j:j+ncc_size,:], axis=(0,1))
+            mean = np.mean(image[i-ncc_fl_div2:i+ncc_fl_div2+1, j-ncc_fl_div2:j+ncc_fl_div2+1,:], axis=(0,1))
             #(j-ncc_fl_div2)+y*(i-ncc_fl_div2)
-            B = (image[i:i+ncc_size, j:j+ncc_size, :] - mean).T
+            B = (image[i-ncc_fl_div2:i+ncc_fl_div2+1, j-ncc_fl_div2:j+ncc_fl_div2+1,:] - mean).T
             C = B.flatten()
             D = C.reshape(num_chan,ncc_size**2)
             E = D.T

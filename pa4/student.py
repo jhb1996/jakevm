@@ -75,7 +75,7 @@ def compute_photometric_stereo_impl(lights, images):
         if bools[i] == False:
             normals[i,:] = np.zeros(3)
         else:
-            normals[i,:] = np.divide(G[i,j,:], albedo)
+            normals[i,:] = np.divide(G[i,:], albedo)
     
     return albedo, normals
 

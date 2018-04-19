@@ -40,7 +40,7 @@ def compute_photometric_stereo_impl(lights, images):
     
     print ("i shape", (N,height,width,num_channels))
     
-    rshp_images = np.reshape(N,height*width*num_channels) 
+    rshp_images = np.reshape(images (N,height*width*num_channels))
     
     print(np.shape(rshp_images))
     

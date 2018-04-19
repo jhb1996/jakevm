@@ -56,27 +56,29 @@ def compute_photometric_stereo_impl(lights, images):
     
     Ggrayscale = np.mean(G3chan, axis=2)
     albedo_for_norm = np.linalg.norm(Ggrayscale, axis = 2)
-    
+    bools = albedo_for_norm < 1e-7
     print("albedo shape", np.shape(albedo))
     #print("albedo", albedo)
     
-    
-    #albedo_norm = np.linalg.norm(albedo, axis = 2)
-    bools = albedo>1e-7
-    #albedo=albedo*bools
-   # print("albedo shape", np.shape(albedo))
-   # print("albedo", albedo)
-    normals = np.zeros(np.shape(albedo))
-    for i in range(len(albedo)):
-    # for i in range(x):
-    #     for i in range(y):
-        
-        if bools[i] == False:
-            normals[i,:] = np.zeros(3)
-        else:
-            normals[i,:] = np.divide(G[i,:], albedo_for_norm)
-    
+    normals = Ggrayscale/np.maximum(1e-7, albedo_for_norm)
+    normals[bools]=0
     return albedo, normals
+    
+   #  #albedo_norm = np.linalg.norm(albedo, axis = 2)
+   #  #albedo=albedo*bools
+   # # print("albedo shape", np.shape(albedo))
+   # # print("albedo", albedo)
+   #  normals = np.zeros(np.shape(albedo))
+   #  for i in range(len(albedo)):
+   #  # for i in range(x):
+   #  #     for i in range(y):
+   #      
+   #      if bools[i] == False:
+   #          normals[i,:] = np.zeros(3)
+   #      else:
+   #          normals[i,:] = np.divide(G[i,:], albedo_for_norm)
+   #  
+   #  
 
     # rImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
     # bImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))

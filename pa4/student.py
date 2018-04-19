@@ -187,7 +187,7 @@ def pyrup_impl(image):
     Output:
         up -- 2 height x 2 width [x channels] image of type float32.
     """
-        shape = np.shape(image)
+    shape = np.shape(image)
     print ("shape is", shape)
     if len(shape) == 2:
         mixed = np.zeros((shape[0]*2,shape[1]*2))

@@ -176,7 +176,7 @@ def project_impl(K, Rt, points):
     print ("shape points_homo =", np.shape(points_homo))
     #print ("points", points)
     #projections = np.dot(P,points_homo) #do I invert P?
-    projections = np.tensordot(points_homo, np.transpose(P), axis = 1)
+    projections = np.tensordot(points_homo, np.transpose(P), axes = 1)
 
     return projections
     

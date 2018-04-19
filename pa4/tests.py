@@ -61,6 +61,10 @@ def preprocess_ncc_delta_test():
 
     assert n.shape == (2 * ncc_size - 1, 2 * ncc_size -
                        1, 3 * ncc_size * ncc_size)
+    
+    print (n[2,2,:])#delete me
+    print (correct[2,2,:])
+    
     assert (np.abs(n - correct) < 1e-6).all()
 
 @skip_not_implemented

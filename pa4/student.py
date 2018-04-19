@@ -60,7 +60,7 @@ def compute_photometric_stereo_impl(lights, images):
     print("albedo shape", np.shape(albedo))
     #print("albedo", albedo)
     
-    normals = Ggrayscale/np.maximum(1e-7, albedo_for_norm)
+    normals = Ggrayscale/np.maximum(1e-7, albedo_for_norm[:,:,np.newaxis])
     normals[bools]=0
     return albedo, normals
     

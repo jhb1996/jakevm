@@ -302,7 +302,7 @@ def preprocess_ncc_impl(image, ncc_size):
         for j in range(y):
             
             if i<ncc_size//2 or i>=x-ncc_size//2:
-               new_patch = np.zeros((ncc_size,ncc_size)) 
+               new_patch = np.zeros(num_chan*ncc_size**2)) 
             else:
                 patch = mean_subracted_mat[i, j, :]
                 norm = np.linalg.norm(patch)

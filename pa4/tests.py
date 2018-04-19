@@ -65,7 +65,7 @@ def preprocess_ncc_delta_test():
     #print (n[2,0,:])#delete me
     #print (correct[2,0,:])
     
-    print (np.abs(n[2,3,19] - correct[2,3,19])<1e-6)
+    print (np.abs(n[2,3,19] - correct[2,3,19]))
     print (n[2,3,:],correct[2,3,:])
     
     # x,y,z = n.shape

@@ -79,7 +79,6 @@ def compute_photometric_stereo_impl(lights, images):
     # LLinv_t_L = np.dot(LLinv, lights)
     # gG = np.dot(bLLinv_t_L,bImat)
     
-    print ("Imat shape", np.shape(Imat))
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
     G = np.dot(LLinv_t_L,rshp_images)

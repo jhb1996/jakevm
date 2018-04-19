@@ -8,9 +8,6 @@ from scipy.sparse import spdiags
 from scipy.signal import convolve2d
 import cv2
 from colors import COLORS
-#######delete this#######
-from scipy import ndimage
-#########################
 
 
 
@@ -113,11 +110,6 @@ def takeXGradient(cvImage):
         conv2_r = convolve2d(conv1_r, filter2, mode='same', boundary='fill', fillvalue=0)
         img = cv2.merge((conv2_b,conv2_g,conv2_r))
         return img
-        
-        
-    #this should work assuming c
-    #conv1 =scipy.ndimage.filters.convolve(cvImage, filter1, output=None, mode='constant', cval=0.0, origin=0)#conv1 = convolve2d(cvImage, filter1, mode='same', boundary='fill', fillvalue=0)
-    #conv2 = scipy.ndimage.filters.convolve(conv1, filter2, output=None, mode='constant', cval=0.0, origin=0)#conv2 = convolve2d(conv1, filter2, mode='same', boundary='fill', fillvalue=0)
 
     # TODO:PA2 Fill in this function
 def takeYGradient(cvImage):
@@ -398,7 +390,7 @@ def approxNormalizedBisect(W, d):
     I = np.identity(m_n)
     d_sqrt =  np.sqrt(d)
     neg_sqrt_d = np.reciprocal(d_sqrt)
-    neg_sqrt_d_diag = np.diag(neg_sqrt_d)#spdiags(neg_sqrt_d ,0,m_n,m_n)
+    neg_sqrt_d_diag = np.diag(neg_sqrt_d)
     L = I-np.dot(np.dot((neg_sqrt_d_diag),W), neg_sqrt_d_diag)
     w,v = scipy.linalg.eigh(L)
     argsorted = np.argsort(w)
@@ -425,31 +417,19 @@ def getColorWeights(cvImage, r, sigmaF=5, sigmaX=6):
             closely each pair of pixels is connected
     
     """
-    sigmaXsq = sigmaX#**2
-    sigmaFsq = sigmaF#**2
+    sigmaXsq = sigmaX**2
+    sigmaFsq = sigmaF**2
     shape = np.shape(cvImage)
     m,n = shape[0],shape[1]
     w = np.zeros((m*n,m*n))
-
-
-    # o=-1
-    # for i in range (m*n):
-    #     p = i%n
-    #     if i%n == 0:
-    #         o+=1
-    #     k = -1
     
-    #subtract every pixel in cvimage from cvimage[i][j]
-    #take the elementwise norm of everything
-    #raise it all to an exponent
-    #reshape it into a 1*n*3 and stick it in i
-    
-
+    #o and p are the indicies of the pixel we are calculating for
     o=-1
     for i in range (m*n):
         p = i%n
         if i%n == 0:
             o+=1
+        #k and l are the indicies of the pixel we are comparing to
         k = -1
         for j in range (m*n):
             l = j%n
@@ -486,7 +466,7 @@ def reconstructNCutSegments(cvImage, y, threshold=0):
     for i in range(m):
         for j in range(n):
             if bools[(i*n)+j]==True:
-                new[i][j] = [0,255,255] #try: im2[np.where((y>0).all(axis = 2))] = [0,255,255]
+                new[i][j] = [0,255,255]
             else:
                 new[i][j] = [255,0,0]
     return new
@@ -503,44 +483,7 @@ def nCutSegmentation(cvImage, sigmaF=5, sigmaX=6):
     segments = reconstructNCutSegments(cvImage, y, 0)
     return segments.astype(np.uint8)
 
-# def printa(nparray):
-#     def genspaces(num):
-#         spaces = ""
-#         for i in range(num):
-#             spaces += " "
-#         return spaces
-#     m,n = np.shape(nparray)
-#     # print ("[", end='')
-#     for i in range(m):
-#         # print ("[", end='')
-#         for j in range (n):
-#             # print((nparray[i][j]+", "+genspaces(7-len(str(nparray[i][j]))),end='')
-#         # if i==m-1:
-#             # print ("]", end ='')
-#             print ("]")
-# if __name__ == "__main__":
-#     cvImage = np.array([[10,11,12],[13,14,15],[16,17,18]])
-#     minIn = 10
-#     maxIn = 20
-#     minOut = -500
-#     maxOut = -200
-#     #print (normalizeImage(cvImage, minIn, maxIn, minOut, maxOut))
-#     gradientImage = np.array([[-0,-5,-20],[5,10,20],[-7,0,7]])
-#     #print(getDisplayGradient(gradientImage))
-#     #imageForGradient = np.array([[0,5,10],[5,50,70],[80,90,100]])
-#     # imageForGradient = np.array([[9,9,9],[9,9,9],[9,9,9]])
-#      imageForGradient = np.array([[0,0,0],[0,0,0],[0,0,0]])
-# # 
-# # 
-#     print(takeXGradient(imageForGradient))
-#     processed = ndimage.sobel(imageForGradient, axis=0, mode = 'constant', cval=0.0)
-#     print(processed)
-#     
-#     #print(takeGradientMag(imageForGradient ))
-#     #print (chooseRandomCenters(cvImage, 1))
-#     
-#     print(cvImage[ : , :2])
-#     
+
     
     
 

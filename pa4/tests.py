@@ -62,10 +62,19 @@ def preprocess_ncc_delta_test():
     assert n.shape == (2 * ncc_size - 1, 2 * ncc_size -
                        1, 3 * ncc_size * ncc_size)
     
-    print (n[2,0,:])#delete me
-    print (correct[2,0,:])
+    #print (n[2,0,:])#delete me
+    #print (correct[2,0,:])
     
-    assert (np.abs(n - correct) < 1e-4).all()
+    x,y,z = n.shape
+    for i in range (x):
+        for j in range (y):
+            for k in range (z):
+                print (i,j,k)
+                assert np.abs(n[i,j,k] - correct[i,j,k])<1e-6
+    
+    
+    
+    assert (np.abs(n - correct) < 1e-6).all()
 
 @skip_not_implemented
 def offset_and_scale_ncc_test():

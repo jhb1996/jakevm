@@ -288,7 +288,7 @@ def preprocess_ncc_impl(image, ncc_size):
     for i in range(x):
         for j in range(y):
             
-            if i<ncc_size//2 or i>=x-ncc_size//2 or i<ncc_size//2 or i>=x-ncc_size//2:
+            if i<ncc_size//2 or i>=x-ncc_size//2 or j<ncc_size//2 or j>=y-ncc_size//2:
                patch_vec = np.zeros(num_chan*ncc_size**2) 
             else:
                 patch = mean_subracted_mat[i, j, :]

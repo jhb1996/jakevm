@@ -224,8 +224,8 @@ def project_impl(K, Rt, points):
     P = np.dot(K, Rt)
     x,y,_ = np.shape(points)
     points_homo = np.concatenate((points,np.ones((x,y,1))),axis=2)
-    print ("shape P transpose =", np.shape(np.transpose(P)))
-    print ("shape points_homo =", np.shape(points_homo))
+    #print ("shape P transpose =", np.shape(np.transpose(P)))
+    #print ("shape points_homo =", np.shape(points_homo))
     #print ("points", points)
     #projections = np.dot(P,points_homo) #do I invert P?
     projections_homo = np.tensordot(points_homo, np.transpose(P), axes = 1)
@@ -289,7 +289,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     m4x3[3] = np.multiply(depth, np.dot(Kinv, [width,height,1]))
     #m2x2x3 = np.reshape(m4x3,(2,2,3))
     
-    tpose_R = Rt[0:3, 0:3]
+    tpose_R = Rt[0:3, 0:3].T
     #Rinv = np.zeros((4,4))
     tpose_R_t_t = np.dot(tpose_R, Rt[:,3:])
     #Rinv[0:3, 0:3] = tpose_R
@@ -301,7 +301,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     print(tpose_R_t_t)
     print ("shape tpose_R_t_t", tpose_R_t_t)
     print ("shape tpose_R, np.transpose(m4x3))", tpose_R, np.transpose(m4x3))
-    p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t#add back in after
+    p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t
     p2x2x3 = np.reshape(p4x3,(2,2,3))
     return p2x2x3
     #return np.zeros((2,2,3))

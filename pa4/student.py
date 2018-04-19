@@ -1,6 +1,6 @@
 # Please place imports here.
 # BEGIN IMPORTS
-
+import numpy as np
 # END IMPORTS
 
 

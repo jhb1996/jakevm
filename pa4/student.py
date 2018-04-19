@@ -288,12 +288,12 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     m4x3[2] = np.multiply(depth, np.dot(Kinv, [0,height,1]))
     m4x3[3] = np.multiply(depth, np.dot(Kinv, [width,height,1]))
     #m2x2x3 = np.reshape(m4x3,(2,2,3))
-    m4x3= m4x3/m4x3[:,2][:,np.newaxis]
+    m4x3= m4x3/m4x3[:,2][:,np.newaxis] * depth
     
     
     tpose_R = Rt[0:3, 0:3].T
     #Rinv = np.zeros((4,4))
-    tpose_R_t_t = np.dot(tpose_R, Rt[:,3:])
+    tpose_R_t_t = np.dot(tpose_R, Rt[:,3])
     #Rinv[0:3, 0:3] = tpose_R
     #handles the different ps all at once with a matrix multiplication
     #do I need to transpose

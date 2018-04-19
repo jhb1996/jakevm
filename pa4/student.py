@@ -1,6 +1,7 @@
 # Please place imports here.
 # BEGIN IMPORTS
 import numpy as np
+import opencv as cv2
 # END IMPORTS
 
 

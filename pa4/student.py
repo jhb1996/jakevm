@@ -174,8 +174,8 @@ def project_impl(K, Rt, points):
     print ("shape points =", np.shape(points))
     print ("points", points)
     #shape = np.shape(points)
-    np.concatonate(points,1,axis=2)
-    projections = np.dot(P,points) #do I invert P?
+    points_homo = np.concatonate(points,1,axis=2)
+    projections = np.dot(P,points_homo) #do I invert P?
     
 
     return projections

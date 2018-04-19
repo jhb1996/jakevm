@@ -276,7 +276,7 @@ def preprocess_ncc_impl(image, ncc_size):
     ncc_fl_div2 = ncc_size//2
     for i in range(ncc_fl_div2, x-ncc_fl_div2):
         for j in range(ncc_fl_div2, y-ncc_fl_div2):
-            print (i,j)
+            #print (i,j)
             mean = np.mean(image[i-ncc_fl_div2:i+ncc_fl_div2+1, j-ncc_fl_div2:j+ncc_fl_div2+1,:], axis=(0,1))
             #(j-ncc_fl_div2)+y*(i-ncc_fl_div2)
             B = (image[i-ncc_fl_div2:i+ncc_fl_div2+1, j-ncc_fl_div2:j+ncc_fl_div2+1,:] - mean).T
@@ -288,7 +288,7 @@ def preprocess_ncc_impl(image, ncc_size):
     for i in range(x):
         for j in range(y):
             
-            if i<ncc_size//2 or j>=x-ncc_size//2:
+            if i<ncc_size//2 or i>=x-ncc_size//2 or i<ncc_size//2 or i>=x-ncc_size//2:
                patch_vec = np.zeros(num_chan*ncc_size**2) 
             else:
                 patch = mean_subracted_mat[i, j, :]

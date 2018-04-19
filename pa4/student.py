@@ -360,11 +360,11 @@ def preprocess_ncc_impl(image, ncc_size):
     for c in range (num_chan):
         single_chan_image = image[:,:, c]
         assert np.shape(single_chan_image) == (x,y)
-        mean_subracted_mat = np.zeros((x,y))
+        mean_subracted_mat = np.zeros((x,y,num_chan*ncc_size**2))
         for i in range(ncc_size//2, x-ncc_size//2):
             for j in range(ncc_size//2, y-ncc_size//2):
                 mean = np.mean(single_chan_image[i:i+ncc_size, j:j+ncc_size])
-                mean_subracted_mat[i, j] = single_chan_image[i:i+ncc_size, j:j+ncc_size] - mean
+                mean_subracted_mat[:,:, i, j] = single_chan_image[i:i+ncc_size, j:j+ncc_size] - mean
     num = 0                 
     for i in range(x):
         for j in range(y):

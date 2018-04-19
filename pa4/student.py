@@ -40,9 +40,9 @@ def compute_photometric_stereo_impl(lights, images):
     
     print ("i shape", (shape_i))
     
-    rImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    bImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    gImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    # rImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    # bImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    # gImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
     
     rshp_images = np.reshape(shape_i[0],shape_i[1]*shape_i[2]*shape_i[3])
     
@@ -84,10 +84,10 @@ def compute_photometric_stereo_impl(lights, images):
     G = np.dot(LLinv_t_L,rshp_images)
     print("G shape", np.shape(G))
     #print("G", albedo)
-    G3chan = np.reshape(shape_l[1],shape_l[2],shape_l[3])
+    G3chan = np.reshape(shape_l[1],shape_l[2],shape_l[3],3)
     Ggrayscale = np.mean(G3chan, axis=2)
     
-    albedo = np.linalg.norm(Ggrayscale, axis = 0)
+    albedo = np.linalg.norm(Ggrayscale, axis = 2)
     
     
     print("albedo shape", np.shape(albedo))

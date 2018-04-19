@@ -272,17 +272,31 @@ def preprocess_ncc_impl(image, ncc_size):
     x,y,num_chan= np.shape(image)
     final_mat = np.zeros((x,y,num_chan*ncc_size**2))
     
-    for c in range (num_chan):
-        single_chan_image = image[:,:, c]
-        assert np.shape(single_chan_image) == (x,y)
-        mean_subracted_mat = np.zeros((x,y,num_chan*ncc_size**2))
-        ncc_fl_div2 = ncc_size//2
-        for i in range(ncc_fl_div2, x-ncc_fl_div2):
-            for j in range(ncc_fl_div2, ncc_fl_div2):
-                print (i,j)
-                mean = np.mean(single_chan_image[i:i+ncc_size, j:j+ncc_size])
-                #(j-ncc_fl_div2)+y*(i-ncc_fl_div2)
-                mean_subracted_mat[i, j,:] = (single_chan_image[i:i+ncc_size, j:j+ncc_size] - mean).flatten()
+    # for c in range (num_chan):
+    #     single_chan_image = image[:,:, c]
+    #     assert np.shape(single_chan_image) == (x,y)
+    #     mean_subracted_mat = np.zeros((x,y,num_chan*ncc_size**2))
+    #     ncc_fl_div2 = ncc_size//2
+    #     for i in range(ncc_fl_div2, x-ncc_fl_div2):
+    #         for j in range(ncc_fl_div2, ncc_fl_div2):
+    #             print (i,j)
+    #             mean = np.mean(single_chan_image[i:i+ncc_size, j:j+ncc_size])
+    #             #(j-ncc_fl_div2)+y*(i-ncc_fl_div2)
+    #             mean_subracted_mat[i, j,c,:] = (single_chan_image[i:i+ncc_size, j:j+ncc_size] - mean).flatten()
+    
+
+    mean_subracted_mat = np.zeros((x,y,num_chan*ncc_size**2))
+    ncc_fl_div2 = ncc_size//2
+    for i in range(ncc_fl_div2, x-ncc_fl_div2):
+        for j in range(ncc_fl_div2, ncc_fl_div2):
+            print (i,j)
+            mean = np.mean(image[i:i+ncc_size, j:j+ncc_size,:], axis=(0,1))
+            #(j-ncc_fl_div2)+y*(i-ncc_fl_div2)
+            B = (image[i:i+ncc_size, j:j+ncc_size, :] - mean).T
+            C = B.flatten()
+            D = C.reshape(num_chan,x*y)
+            E = D.T
+            mean_subracted_mat[i, j,:] = E.flatten()
     num = 0                 
     for i in range(x):
         for j in range(y):

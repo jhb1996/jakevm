@@ -304,7 +304,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     print ("shape tpose_R_t_t", tpose_R_t_t)
     print ("shape tpose_R, np.transpose(m4x3))", tpose_R, np.transpose(m4x3))
     p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t[:,np.newaxis]
-    p2x2x3 = np.reshape(p4x3,(2,2,3))
+    p2x2x3 = np.reshape(p4x3.T,(2,2,3))
     return p2x2x3
     #return np.zeros((2,2,3))
 

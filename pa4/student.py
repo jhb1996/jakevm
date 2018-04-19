@@ -275,7 +275,7 @@ def preprocess_ncc_impl(image, ncc_size):
     mean_subracted_mat = np.zeros((x,y,num_chan*ncc_size**2))
     ncc_fl_div2 = ncc_size//2
     for i in range(ncc_fl_div2, x-ncc_fl_div2):
-        for j in range(ncc_fl_div2, ncc_fl_div2):
+        for j in range(ncc_fl_div2, y-ncc_fl_div2):
             print (i,j)
             mean = np.mean(image[i:i+ncc_size, j:j+ncc_size,:], axis=(0,1))
             #(j-ncc_fl_div2)+y*(i-ncc_fl_div2)

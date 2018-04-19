@@ -1,7 +1,6 @@
 # Please place imports here.
 # BEGIN IMPORTS
-import numpy as np
-import cv2
+
 # END IMPORTS
 
 
@@ -28,7 +27,6 @@ def compute_photometric_stereo_impl(lights, images):
         normals -- float32 height x width x 3 image with dimensions matching
                    the input images.
     """
-    
     #how do I avoid doing each pixel by itself
     #can I do inverse LT times I
     #print (np.shape(lights))
@@ -148,7 +146,7 @@ def pyrdown_impl(image):
         down -- ceil(height/2) x ceil(width/2) [x channels] image of type
                 float32.
     """
-    #scipy.ndimage.filters.correlate()
+        #scipy.ndimage.filters.correlate()
     shape = np.shape(image)
     kern = np.array([.0625, .24, .375, .24, .0625])
     fltrd1 = cv2.filter2D(src=image, ddepth=-1, kernel=kern, borderType = cv2.BORDER_REFLECT_101)
@@ -164,7 +162,7 @@ def pyrdown_impl(image):
     else: 
         bad = image[::2,::2, :]
     return bad
-    
+
 
 def pyrup_impl(image):
     """
@@ -189,7 +187,7 @@ def pyrup_impl(image):
     Output:
         up -- 2 height x 2 width [x channels] image of type float32.
     """
-    shape = np.shape(image)
+        shape = np.shape(image)
     print ("shape is", shape)
     if len(shape) == 2:
         mixed = np.zeros((shape[0]*2,shape[1]*2))
@@ -203,10 +201,6 @@ def pyrup_impl(image):
     fltrd2 = cv2.filter2D(src=fltrd1, ddepth=-1, kernel=np.transpose(kern), borderType = cv2.BORDER_REFLECT_101)
     
     return mixed
-    
-    
-    
-    #return fltrd2
 
 
 def project_impl(K, Rt, points):
@@ -220,7 +214,6 @@ def project_impl(K, Rt, points):
     Output:
         projections -- height x width x 2 array of 2D projections
     """
-    
     #lec 17 slide 25
     
     #am I projecting from the real world to an image or from an image to the real world?
@@ -240,7 +233,8 @@ def project_impl(K, Rt, points):
     
     #shape = np.shape(points)
     #return np,zeros((shape[0],shape[1],2))
-    
+
+
 def unproject_corners_impl(K, width, height, depth, Rt):
     """
     Undo camera projection given a calibrated camera and the depth for each
@@ -275,7 +269,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
             | R t |^-1 = | R' -R't |
             | 0 1 |      | 0   1   |
 
-          p = R' * (z * x', z * y', z * 1)' - R't
+          p = R' * (z * x', z * y', z, 1)' - R't
 
     Input:
         K -- camera intrinsics calibration matrix
@@ -286,7 +280,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     Output:
         points -- 2 x 2 x 3 array of 3D points
     """
-    Kinv = np.linalg.inv(K)
+     Kinv = np.linalg.inv(K)
     m4x3 = np.zeros((4,3))
     m4x3[0] = np.multiply(depth, np.dot(Kinv, [0,0,1]))
     m4x3[1] = np.multiply(depth, np.dot(Kinv, [width,0,1]))
@@ -310,6 +304,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     p2x2x3 = np.reshape(p4x3,(2,2,3))
     return p2x2x3
     #return np.zeros((2,2,3))
+
 
 def preprocess_ncc_impl(image, ncc_size):
     """
@@ -393,7 +388,8 @@ def preprocess_ncc_impl(image, ncc_size):
     #         final_mat[x,y,num]
     # #return final_mat
     return np.zeros((x,y,num_chan*ncc_size**2))
-    
+
+
 def compute_ncc_impl(image1, image2):
     """
     Compute normalized cross correlation between two images that already have
@@ -407,4 +403,3 @@ def compute_ncc_impl(image1, image2):
                image2.
     """
     return np.sum(np.multiply(image1, image2), axis = 2)
-    

@@ -307,10 +307,10 @@ def preprocess_ncc_impl(image, ncc_size):
                 patch = mean_subracted_mat[i, j, :]
                 norm = np.linalg.norm(patch)
                 if norm < 1e-6: 
-                   new_patch = patch*0
+                   new_patch = np.zeros(num_chan*ncc_size**2) 
                 else:
                     new_patch = patch/norm
-            patch_vec = (np.transpose(new_patch)).flatten()
+            patch_vec = new_patch
             final_mat[i,j,:] = patch_vec
             num += 1
     return final_mat

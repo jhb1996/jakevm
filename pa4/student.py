@@ -52,10 +52,10 @@ def compute_photometric_stereo_impl(lights, images):
     #print("G shape", np.shape(G))
     #print("G", albedo)
     G3chan = np.reshape(G,(height,width,num_channels,3))
+    albedo = np.linalg.norm(G3chan , axis = 3)
+    
     Ggrayscale = np.mean(G3chan, axis=2)
-    
-    albedo = np.linalg.norm(Ggrayscale, axis = 2)
-    
+    albedo_for_norm = np.linalg.norm(Ggrayscale, axis = 2)
     
     print("albedo shape", np.shape(albedo))
     #print("albedo", albedo)
@@ -67,7 +67,6 @@ def compute_photometric_stereo_impl(lights, images):
    # print("albedo shape", np.shape(albedo))
    # print("albedo", albedo)
     normals = np.zeros(np.shape(albedo))
-    x,y = np.shape(bools)
     for i in range(len(albedo)):
     # for i in range(x):
     #     for i in range(y):
@@ -75,7 +74,7 @@ def compute_photometric_stereo_impl(lights, images):
         if bools[i] == False:
             normals[i,:] = np.zeros(3)
         else:
-            normals[i,:] = np.divide(G[i,:], albedo)
+            normals[i,:] = np.divide(G[i,:], albedo_for_norm)
     
     return albedo, normals
 

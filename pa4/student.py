@@ -276,11 +276,12 @@ def preprocess_ncc_impl(image, ncc_size):
         single_chan_image = image[:,:, c]
         assert np.shape(single_chan_image) == (x,y)
         mean_subracted_mat = np.zeros((x,y,num_chan*ncc_size**2))
-        for i in range(ncc_size//2, x-ncc_size//2):
-            for j in range(ncc_size//2, y-ncc_size//2):
+        ncc_fl_div2 = ncc_size//2
+        for i in range(ncc_fl_div2, x-ncc_fl_div2):
+            for j in range(ncc_fl_div2, ncc_fl_div2):
                 print (i,j)
                 mean = np.mean(single_chan_image[i:i+ncc_size, j:j+ncc_size])
-                mean_subracted_mat[:,:, j+y*i] = (single_chan_image[i:i+ncc_size, j:j+ncc_size] - mean).flatten()
+                mean_subracted_mat[:,:, (j-ncc_fl_div2)+y*(i-ncc_fl_div2)] = (single_chan_image[i:i+ncc_size, j:j+ncc_size] - mean).flatten()
     num = 0                 
     for i in range(x):
         for j in range(y):

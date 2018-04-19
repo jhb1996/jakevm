@@ -304,7 +304,7 @@ def preprocess_ncc_impl(image, ncc_size):
             if i<ncc_size//2 or i>=x-ncc_size//2:
                new_patch = np.zeros((ncc_size,ncc_size)) 
             else:
-                patch = mean_subracted_mat[i:i+ncc_size, j:j+ncc_size, :]
+                patch = mean_subracted_mat[i, j, :]
                 norm = np.linalg.norm(patch)
                 if norm < 1e-6: 
                    new_patch = patch*0

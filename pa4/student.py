@@ -295,7 +295,7 @@ def preprocess_ncc_impl(image, ncc_size):
                    new_patch = patch*0
                 else:
                     new_patch = patch/norm
-            patch_vec = np.flatten(np.transpose(new_patch))
+            patch_vec = (np.transpose(new_patch)).flatten()
             num += 1
             final_mat[x,y,num]
     return final_mat

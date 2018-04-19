@@ -288,21 +288,13 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     m4x3[2] = np.multiply(depth, np.dot(Kinv, [0,height,1]))
     m4x3[3] = np.multiply(depth, np.dot(Kinv, [width,height,1]))
     #m2x2x3 = np.reshape(m4x3,(2,2,3))
-    m4x3= m4x3/m4x3[:,2][:,np.newaxis] * depth
-    print ("shape m4x3", m4x3.shape, "depth", depth)
-    
+    m4x3= m4x3/m4x3[:,2][:,np.newaxis] * depth    
     tpose_R = Rt[0:3, 0:3].T
     #Rinv = np.zeros((4,4))
     tpose_R_t_t = np.dot(tpose_R, Rt[:,3])
     #Rinv[0:3, 0:3] = tpose_R
     #handles the different ps all at once with a matrix multiplication
     #do I need to transpose
-    print (Rt)
-    print (tpose_R)
-    print (Rt[:,3:])
-    print(tpose_R_t_t)
-    print ("shape tpose_R_t_t", tpose_R_t_t)
-    print ("shape tpose_R, np.transpose(m4x3))", tpose_R, np.transpose(m4x3))
     p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t[:,np.newaxis]
     p2x2x3 = np.reshape(p4x3.T,(2,2,3))
     return p2x2x3
@@ -363,34 +355,33 @@ def preprocess_ncc_impl(image, ncc_size):
     
 
     x,y,num_chan= np.shape(image)
-    # final_mat = np.zeros((x,y,num_chan*ncc_size**2))
-    # 
-    # for c in range (num_chan):
-    #     single_chan_image = image[:,:, c]
-    #     assert np.shape(single_chan_image) == (x,y)
-    #     mean_subracted_mat = np.zeros((x,y))
-    #     for i in range(ncc_size//2, x-ncc_size//2):
-    #         for j in range(ncc_size//2, y-ncc_size//2):
-    #             mean = np.mean(single_chan_image[i:i+ncc_size, j:j+ncc_size])
-    #             mean_subracted_mat[:,:, single_chan_image] = single_chan_image[i:i+ncc_size, j:j+ncc_size] - mean
-    # num = 0                 
-    # for i in range(x):
-    #     for j in range(y):
-    #         
-    #         if i<ncc_size//2 or i>=x-ncc_size//2:
-    #            new_patch = np.zeros((ncc_size,ncc_size)) 
-    #         else:
-    #             patch = mean_subracted_mat[i:i+ncc_size, j:j+ncc_size, :]
-    #             norm = np.linalg.norm(patch)
-    #             if norm < 1e-6: 
-    #                new_patch = patch*0
-    #             else:
-    #                 new_patch = patch/norm
-    #         patch_vec = np.flatten(np.transpose(new_patch))
-    #         num += 1
-    #         final_mat[x,y,num]
-    # #return final_mat
-    return np.zeros((x,y,num_chan*ncc_size**2))
+    final_mat = np.zeros((x,y,num_chan*ncc_size**2))
+    
+    for c in range (num_chan):
+        single_chan_image = image[:,:, c]
+        assert np.shape(single_chan_image) == (x,y)
+        mean_subracted_mat = np.zeros((x,y))
+        for i in range(ncc_size//2, x-ncc_size//2):
+            for j in range(ncc_size//2, y-ncc_size//2):
+                mean = np.mean(single_chan_image[i:i+ncc_size, j:j+ncc_size])
+                mean_subracted_mat[:,:, single_chan_image] = single_chan_image[i:i+ncc_size, j:j+ncc_size] - mean
+    num = 0                 
+    for i in range(x):
+        for j in range(y):
+            
+            if i<ncc_size//2 or i>=x-ncc_size//2:
+               new_patch = np.zeros((ncc_size,ncc_size)) 
+            else:
+                patch = mean_subracted_mat[i:i+ncc_size, j:j+ncc_size, :]
+                norm = np.linalg.norm(patch)
+                if norm < 1e-6: 
+                   new_patch = patch*0
+                else:
+                    new_patch = patch/norm
+            patch_vec = np.flatten(np.transpose(new_patch))
+            num += 1
+            final_mat[x,y,num]
+    return final_mat
 
 
 def compute_ncc_impl(image1, image2):

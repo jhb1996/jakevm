@@ -39,25 +39,16 @@ def compute_photometric_stereo_impl(lights, images):
     shape_i = np.shape(images)
     
     Imat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    #bImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    #gImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
     for num, pic in enumerate(images):
         if len(shape_i) == 4:
             pic = pic[:,:,0]
         flat = pic.flatten()
-            #bflat = bpic.flatten()
-            #gflat = gpic.flatten()
         Imat[num] = flat
-            #rImat[num] = bflat
-            #rImat[num] = gflat
-            
-        #for single_chan_image in [rImat,rImat,rImat]:       
-            #rimage = images[:,:,0,:] #np.mean(images, axis = 2)
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
     G = np.dot(LLinv_t_L,Imat)
     
-    albedo = np.linalg.norm(G, axis = 0)
+    albedo = np.linalg.norm(G, axis = 1)
     normals = np.divide(G, albedo)
     
     return albedo, normals

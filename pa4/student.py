@@ -40,38 +40,71 @@ def compute_photometric_stereo_impl(lights, images):
     
     print ("i shape", (shape_i))
     
-    Imat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    for num, pic in enumerate(images):
-        if len(shape_i) == 4:
-            pic = pic[:,:,0]
-        flat = pic.flatten()
-        Imat[num] = flat
+    rImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    bImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    gImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
+    
+    rshp_images = np.reshape(shape_i[0],shape_i[1]*shape_i[2]*shape_i[3])
+    
+    # for num, pic in enumerate(images):
+    #     if len(shape_i) == 4:
+            
+            # rpic = pic[:,:,0]
+            # bpic = pic[:,:,1]
+            # gpic = pic[:,:,2]
+            # rflat = rpic.flatten()
+            # bflat = bpic.flatten()
+            # gflat = gpic.flatten()
+            # rImat[num] = rflat
+            # bImat[num] = bflat
+            # gImat[num] = gflat
+    
+    
+            
+    # chan3Imat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]),3)
+    # chan3Imat[:,:,0] = rImat
+    # chan3Imat[:,:,1] = bImat
+    # chan3Imat[:,:,2] = gImat
+    # meanImat = np.mean(chan3Imat ,axis = 2)
+    # 
+    # LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
+    # LLinv_t_L = np.dot(LLinv, lights)
+    # rG = np.dot(rLLinv_t_L,rImat)
+    # 
+    # LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
+    # LLinv_t_L = np.dot(LLinv, lights)
+    # bG = np.dot(bLLinv_t_L,bImat)
+    # 
+    # LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
+    # LLinv_t_L = np.dot(LLinv, lights)
+    # gG = np.dot(bLLinv_t_L,bImat)
+    
     print ("Imat shape", np.shape(Imat))
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
-    G = np.dot(LLinv_t_L,Imat)
-    
+    G = np.dot(LLinv_t_L,rshp_images)
     print("G shape", np.shape(G))
     #print("G", albedo)
-    
-    
     albedo = np.linalg.norm(G, axis = 0)
     print("albedo shape", np.shape(albedo))
     #print("albedo", albedo)
     
-    albedo_norm = np.linalg.norm(albedo, axis = 2)
-    bools = albedo_norm>1e-7
+    
+    #albedo_norm = np.linalg.norm(albedo, axis = 2)
+    bools = albedo>1e-7
     #albedo=albedo*bools
-    print("albedo shape", np.shape(albedo))
-    print("albedo", albedo)
+   # print("albedo shape", np.shape(albedo))
+   # print("albedo", albedo)
     normals = np.zeros(np.shape(albedo))
     x,y = np.shape(bools)
-    for i in range(x):
-        for i in range(y):
-            if bools[i,j] == False:
-                normals[i,j,:] = np.zeros(3)
-            else:
-                normals[i,j,:] = np.divide(G[i,j,:], albedo)
+    for i in range(len(albedo)):
+    # for i in range(x):
+    #     for i in range(y):
+        
+        if bools[i] == False:
+            normals[i,:] = np.zeros(3)
+        else:
+            normals[i,:] = np.divide(G[i,j,:], albedo)
     
     return albedo, normals
 

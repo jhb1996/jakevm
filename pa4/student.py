@@ -224,13 +224,13 @@ def project_impl(K, Rt, points):
     P = np.dot(K, Rt)
     x,y,_ = np.shape(points)
     points_homo = np.concatenate((points,np.ones((x,y,1))),axis=2)
-    print ("shape P =", np.shape(P))
+    print ("shape P transpose =", np.shape(np.transpose(P)))
     print ("shape points_homo =", np.shape(points_homo))
     #print ("points", points)
     #projections = np.dot(P,points_homo) #do I invert P?
-    projections = np.tensordot(points_homo, np.transpose(P), axes = 1)
-
-    return projections
+    projections_homo = np.tensordot(points_homo, np.transpose(P), axes = 1)
+    projections = projections_homo/projections_homo[:,:,2]
+    return projections[:,:,0:2]
     
     #shape = np.shape(points)
     #return np,zeros((shape[0],shape[1],2))

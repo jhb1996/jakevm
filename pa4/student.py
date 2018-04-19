@@ -288,7 +288,7 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     m4x3[2] = np.multiply(depth, np.dot(Kinv, [0,height,1]))
     m4x3[3] = np.multiply(depth, np.dot(Kinv, [width,height,1]))
     #m2x2x3 = np.reshape(m4x3,(2,2,3))
-    m4x3= m4x3/m4x3[:,2]
+    m4x3= m4x3/m4x3[:,2][:,np.newaxis]
     
     
     tpose_R = Rt[0:3, 0:3].T

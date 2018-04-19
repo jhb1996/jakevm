@@ -84,7 +84,12 @@ def compute_photometric_stereo_impl(lights, images):
     G = np.dot(LLinv_t_L,rshp_images)
     print("G shape", np.shape(G))
     #print("G", albedo)
-    albedo = np.linalg.norm(G, axis = 0)
+    G3chan = np.reshape(shape_l[1],shape_l[2],shape_l[3])
+    Ggrayscale = np.mean(G3chan, axis=2)
+    
+    albedo = np.linalg.norm(Ggrayscale, axis = 0)
+    
+    
     print("albedo shape", np.shape(albedo))
     #print("albedo", albedo)
     

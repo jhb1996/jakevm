@@ -38,7 +38,7 @@ def compute_photometric_stereo_impl(lights, images):
     shape_l = np.shape(lights)
     shape_i = np.shape(images)
     
-    print ("L shape", (shape_l))
+    print ("i shape", (shape_i))
     
     Imat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
     for num, pic in enumerate(images):

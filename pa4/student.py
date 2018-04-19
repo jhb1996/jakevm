@@ -28,96 +28,27 @@ def compute_photometric_stereo_impl(lights, images):
         normals -- float32 height x width x 3 image with dimensions matching
                    the input images.
     """
-    #how do I avoid doing each pixel by itself
-    #can I do inverse LT times I
-    #print (np.shape(lights))
-    #print (np.shape(np.transpose(lights)))
-    #print (np.shape(np.dot(lights, np.transpose(lights))))
-    
+
     shape_l = np.shape(lights)
     N,height,width,num_channels = np.shape(images)
-    
-    #print ("i shape", (N,height,width,num_channels))
-    
+
     rshp_images = np.reshape(images, (N,height*width*num_channels))
-    
-    #print(np.shape(rshp_images))
-    
+
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)
-    #print ("shape LLinv_t_L =", np.shape(LLinv_t_L))
-    #print ("shape rshp_images =", np.shape(rshp_images))
+
     G = np.dot(LLinv_t_L,rshp_images)
-    #print("G shape", np.shape(G))
-    #print("G", albedo)
+
     G3chan = np.reshape(G,(height,width,num_channels,3))
     albedo = np.linalg.norm(G3chan , axis = 3)
     
     Ggrayscale = np.mean(G3chan, axis=2)
     albedo_for_norm = np.linalg.norm(Ggrayscale, axis = 2)
     bools = albedo_for_norm < 1e-7
-    #print("albedo shape", np.shape(albedo))
-    #print("albedo", albedo)
     
     normals = Ggrayscale/np.maximum(1e-7, albedo_for_norm[:,:,np.newaxis])
     normals[bools]=0
     return albedo, normals
-    
-   #  #albedo_norm = np.linalg.norm(albedo, axis = 2)
-   #  #albedo=albedo*bools
-   # # print("albedo shape", np.shape(albedo))
-   # # print("albedo", albedo)
-   #  normals = np.zeros(np.shape(albedo))
-   #  for i in range(len(albedo)):
-   #  # for i in range(x):
-   #  #     for i in range(y):
-   #      
-   #      if bools[i] == False:
-   #          normals[i,:] = np.zeros(3)
-   #      else:
-   #          normals[i,:] = np.divide(G[i,:], albedo_for_norm)
-   #  
-   #  
-
-    # rImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    # bImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    # gImat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]))
-    
-    rshp_images = np.reshape(shape_i[0],shape_i[1]*shape_i[2]*shape_i[3])
-    
-    # for num, pic in enumerate(images):
-    #     if len(shape_i) == 4:
-            
-            # rpic = pic[:,:,0]
-            # bpic = pic[:,:,1]
-            # gpic = pic[:,:,2]
-            # rflat = rpic.flatten()
-            # bflat = bpic.flatten()
-            # gflat = gpic.flatten()
-            # rImat[num] = rflat
-            # bImat[num] = bflat
-            # gImat[num] = gflat
-    
-    
-            
-    # chan3Imat = np.zeros((shape_l[1],shape_i[1]*shape_i[2]),3)
-    # chan3Imat[:,:,0] = rImat
-    # chan3Imat[:,:,1] = bImat
-    # chan3Imat[:,:,2] = gImat
-    # meanImat = np.mean(chan3Imat ,axis = 2)
-    # 
-    # LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
-    # LLinv_t_L = np.dot(LLinv, lights)
-    # rG = np.dot(rLLinv_t_L,rImat)
-    # 
-    # LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
-    # LLinv_t_L = np.dot(LLinv, lights)
-    # bG = np.dot(bLLinv_t_L,bImat)
-    # 
-    # LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
-    # LLinv_t_L = np.dot(LLinv, lights)
-    # gG = np.dot(bLLinv_t_L,bImat)
-
 
 def pyrdown_impl(image):
     """
@@ -189,7 +120,6 @@ def pyrup_impl(image):
         up -- 2 height x 2 width [x channels] image of type float32.
     """
     shape = np.shape(image)
-    #print ("shape is", shape)
     if len(shape) == 2:
         mixed = np.zeros((shape[0]*2,shape[1]*2))
         mixed[::2,::2] = image
@@ -216,24 +146,14 @@ def project_impl(K, Rt, points):
         projections -- height x width x 2 array of 2D projections
     """
     #lec 17 slide 25
-    
-    #am I projecting from the real world to an image or from an image to the real world?
-    
-    #print ("shape K =", np.shape(K))
-    #print ("shape Rt =", np.shape(Rt))
+
     P = np.dot(K, Rt)
     x,y,_ = np.shape(points)
     points_homo = np.concatenate((points,np.ones((x,y,1))),axis=2)
-    #print ("shape P transpose =", np.shape(np.transpose(P)))
-    #print ("shape points_homo =", np.shape(points_homo))
-    #print ("points", points)
-    #projections = np.dot(P,points_homo) #do I invert P?
+
     projections_homo = np.tensordot(points_homo, np.transpose(P), axes = 1)
     projections = projections_homo/(projections_homo[:,:,2])[:,:,np.newaxis]
     return projections[:,:,0:2]
-    
-    #shape = np.shape(points)
-    #return np,zeros((shape[0],shape[1],2))
 
 
 def unproject_corners_impl(K, width, height, depth, Rt):
@@ -287,18 +207,13 @@ def unproject_corners_impl(K, width, height, depth, Rt):
     m4x3[1] = np.multiply(depth, np.dot(Kinv, [width,0,1]))
     m4x3[2] = np.multiply(depth, np.dot(Kinv, [0,height,1]))
     m4x3[3] = np.multiply(depth, np.dot(Kinv, [width,height,1]))
-    #m2x2x3 = np.reshape(m4x3,(2,2,3))
     m4x3= m4x3/m4x3[:,2][:,np.newaxis] * depth    
     tpose_R = Rt[0:3, 0:3].T
-    #Rinv = np.zeros((4,4))
     tpose_R_t_t = np.dot(tpose_R, Rt[:,3])
-    #Rinv[0:3, 0:3] = tpose_R
-    #handles the different ps all at once with a matrix multiplication
-    #do I need to transpose
+
     p4x3 = np.dot(tpose_R, np.transpose(m4x3)) - tpose_R_t_t[:,np.newaxis]
     p2x2x3 = np.reshape(p4x3.T,(2,2,3))
     return p2x2x3
-    #return np.zeros((2,2,3))
 
 
 def preprocess_ncc_impl(image, ncc_size):

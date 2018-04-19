@@ -66,7 +66,8 @@ def preprocess_ncc_delta_test():
     #print (correct[2,0,:])
     
     print (np.abs(n[2,3,19] - correct[2,3,19]))
-    print (n[2,3,:],correct[2,3,:])
+    print (n[2,3,:])
+    print (correct[2,3,:])
     
     # x,y,z = n.shape
     # for i in range (x):

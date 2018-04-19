@@ -49,7 +49,22 @@ def compute_photometric_stereo_impl(lights, images):
     G = np.dot(LLinv_t_L,Imat)
     
     albedo = np.linalg.norm(G, axis = 1)
-    normals = np.divide(G, albedo)
+    print("albedo shape", np.shape(albedo))
+    print("albedo", albedo)
+    
+    albedo_norm = np.linalg.norm(albedo, axis = 2)
+    bools = albedo_norm>1e-7
+    #albedo=albedo*bools
+    print("albedo shape", np.shape(albedo))
+    print("albedo", albedo)
+    normals = np.zeros(np.shape(albedo))
+    x,y = np.shape(bools)
+    for i in range(x):
+        for i in range(y):
+            if bools[i,j] == False:
+                normals[i,j,:] = np.zeros(3)
+            else:
+                normals[i,j,:] = np.divide(G[i,j,:], albedo)
     
     return albedo, normals
 

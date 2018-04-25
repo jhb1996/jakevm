@@ -279,12 +279,9 @@ def preprocess_ncc_impl(image, ncc_size):
             #print (i,j)
             mean = np.mean(image[i-ncc_fl_div2:i+ncc_fl_div2+1, j-ncc_fl_div2:j+ncc_fl_div2+1,:], axis=(0,1))
             #(j-ncc_fl_div2)+y*(i-ncc_fl_div2)
-            A = (image[i-ncc_fl_div2:i+ncc_fl_div2+1, j-ncc_fl_div2:j+ncc_fl_div2+1,:] - mean)
-            B = A.reshape(ncc_size**2,num_chan).T
-            #C = B.flatten()
-            #D = C.reshape(num_chan,ncc_size**2)
-            #E = D.T
-            mean_subracted_mat[i, j,:] = B.flatten()
+            sub = (image[i-ncc_fl_div2:i+ncc_fl_div2+1, j-ncc_fl_div2:j+ncc_fl_div2+1,:] - mean)
+            reshape = sub.reshape(ncc_size**2,num_chan).T
+            mean_subracted_mat[i, j,:] = reshape.flatten()
     for i in range(x):
         for j in range(y):
             

@@ -32,7 +32,7 @@ def compute_photometric_stereo_impl(lights, images):
     shape_l = np.shape(lights)
     N,height,width,num_channels = np.shape(images)
 
-    rshp_images = np.reshape(images, (N,height*width*num_channels))
+    rshp_images = np.reshape(images.T, (N,height*width*num_channels))
 
     LLinv =  np.linalg.inv(np.dot(lights, np.transpose(lights)))
     LLinv_t_L = np.dot(LLinv, lights)

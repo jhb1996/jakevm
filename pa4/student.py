@@ -80,7 +80,7 @@ def pyrdown_impl(image):
     """
         #scipy.ndimage.filters.correlate()
     shape = np.shape(image)
-    kern = np.array([.0625, .24, .375, .24, .0625])
+    kern = np.array([[.0625, .24, .375, .24, .0625]])
     fltrd1 = cv2.filter2D(src=image, ddepth=-1, kernel=np.reshape(kern, (1,5)), borderType = cv2.BORDER_REFLECT_101)
     fltrd2 = cv2.filter2D(src=fltrd1, ddepth=-1, kernel=np.reshape(kern, (5,1)), borderType = cv2.BORDER_REFLECT_101)
     if len(shape) == 2:
@@ -127,11 +127,11 @@ def pyrup_impl(image):
         mixed = np.zeros((shape[0]*2,shape[1]*2, shape[2]))
         mixed[::2,::2, :] = image
     #
-    kern = np.array([.125, .5, .75, .5, .125])
+    kern = np.array([[.125, .5, .75, .5, .125]])
     fltrd1 = cv2.filter2D(src=mixed, ddepth=-1, kernel=np.reshape(kern, (1,5)), borderType = cv2.BORDER_REFLECT_101)
     fltrd2 = cv2.filter2D(src=fltrd1, ddepth=-1, kernel=np.reshape(kern, (5,1)), borderType = cv2.BORDER_REFLECT_101)
     
-    return mixed
+    return fltrd2
 
 
 def project_impl(K, Rt, points):

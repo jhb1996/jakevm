@@ -87,13 +87,13 @@ def pyrdown_impl(image):
         down = fltrd2[::2,::2]
     else: 
         down = fltrd2[::2,::2, :]
-    #return down
-    
-    if len(shape) == 2:
-        bad= image[::2,::2]
-    else: 
-        bad = image[::2,::2, :]
-    return bad
+    return down
+    # 
+    # if len(shape) == 2:
+    #     bad= image[::2,::2]
+    # else: 
+    #     bad = image[::2,::2, :]
+    # return bad
 
 
 def pyrup_impl(image):

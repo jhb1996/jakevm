@@ -87,6 +87,8 @@ def pyrdown_impl(image):
         down = fltrd2[::2,::2]
     else: 
         down = fltrd2[::2,::2, :]
+    
+    print (down.shape)
     return down
     # 
     # if len(shape) == 2:

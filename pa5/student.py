@@ -1,6 +1,13 @@
 import numpy as np
 import skimage.transform
 from keras.layers import GlobalAveragePooling2D
+from keras.models import Model
+from keras.models import Predict
+from keras.layers import Dense
+from keras.layers import Dropout
+# from keras.layers import 
+
+
 
 cifar_classes = ['airplane', 'automobile', 'bird', 'cat',
         'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
@@ -25,8 +32,6 @@ def labels_to_one_hot(labels, num_classes):
     
     one_hot = np.zeros((n,num_classes))
     one_hot[np.arange(num_classes), a] = 1
-
-    #np.zeros()
     print(labels)
     return one_hot
     ### TODO-1 ENDS HERE ###
@@ -66,10 +71,16 @@ def split_dataset(x, y, x_t, y_t, train_size, val_size, test_size):
     #Q: how are the dims:train_size x image_size x image_size x 3
     
     # print (x.shape)
-    # images_for_training=x[:train_size]
-    # x_train =
+    x_train=x[:train_size]
+    y_train=y[:train_size]
     
-    raise NotImplementedError
+    x_val=x[train_size:]
+    y_val=y[train_size:]
+    
+    x_test=x_t[:test_size]
+    y_test=y_t[:test_size]
+        
+    return x_train, y_train, x_val, y_val, x_test, y_test
     ### TODO-2a ENDS HERE ###
 
 def preprocess_dataset(x, image_size):
@@ -95,7 +106,7 @@ def preprocess_dataset(x, image_size):
             (n x image_size x image_size x 3)
     '''
     ### TODO-2b BEGINS HERE ###
-    raise NotImplementedError
+    return x.reshape(n, image_size, image_size, 3)
     ### TODO-2b ENDS HERE ###
 
 def get_N_cifar_images(N, L, images, labels):
@@ -120,10 +131,10 @@ def get_N_cifar_images(N, L, images, labels):
             height, width, and channels of images in the given dataset
     '''
     ### TODO-3 BEGINS HERE ###
-    # bools = np.argmax(labels)==L
-    # images_type_L = images[bools]
-    # n_images_type_L = n_images_type_L[:N]
-    # return cifar_classes[L], n_images_type_L
+    bools = np.argmax(labels)==L
+    images_type_L = images[bools]
+    n_images_type_L = n_images_type_L[:N]
+    return cifar_classes[L], n_images_type_L
     
     raise NotImplementedError
     ### TODO-3 ENDS HERE ###
@@ -163,10 +174,12 @@ def build_cifar_top(base_output):
     '''
     cifar_output = GlobalAveragePooling2D()(base_output)
     ### TODO-4 BEGINS HERE ###
-    keras.layers.Dense(units, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)
+    cifar_output = Dense(256, activation='relu')(cifar_output)
+    
+    cifar_output = Dropout(.5, noise_shape=None, seed=None)(cifar_output)
+    
+    cifar_output= Dense(10, activation='softmax')(cifar_output)
 
-    
-    
     raise NotImplementedError
     ### TODO-4 ENDS HERE ###
     return cifar_output
@@ -190,7 +203,10 @@ def freeze_model_weights(model, to_freeze):
         None (update the model's layers in place)
     '''
     ### TODO-5 BEGINS HERE ###
-    raise NotImplementedError
+    lst = model.layers
+    for i in range (freeze):
+        layer = lst[i]
+        layer.trainable = False
     ### TODO-5 ENDS HERE ###
 
 def generate_predictions(model, image_batch):
@@ -215,7 +231,14 @@ def generate_predictions(model, image_batch):
             in the batch
     '''
     ### TODO-6 BEGINS HERE ###
-    raise NotImplementedError
+    preprocessed_images = preprocess_dataset(image_batch)
+    predictions_mat = model.predict(preprocessed_image)
+    print ("predictions mat shape =",predictions_mat.shape)
+    labels = np.argmax(predictions_mat, axis = 1)
+    scores = predictions_mat[labels]#may need to play with the allignments here
+    
+    return labels, scores
+    
     ### TODO-6 ENDS HERE ###
 
 ########## PART 2: QUESTIONS ##########
@@ -269,7 +292,14 @@ def change_labels_av(y_train, y_val, y_test):
             vs vehicles problem (r x 2)
     '''
     ### TODO-7 BEGINS HERE ###
-    raise NotImplementedError
+    cifar_classes = ['airplane', 'automobile', 'bird', 'cat',
+            'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+    av_classes = ['animal', 'vehicle']
+    #d = {0:1,1:1,2:0,3:0,4:0,5:0,6:0,7:0,8:1,9:1}
+    y_train_av = np.dot(y_train, np.array([1,1,0,0,0,0,0,0,1,1]))
+    y_val_av = np.dot(y_val, np.array([1,1,0,0,0,0,0,0,1,1]))
+    y_test_av = np.dot(y_test, np.array([1,1,0,0,0,0,0,0,1,1]))
+    return y_train_av, y_val_av, y_test_av 
     ### TODO-7 ENDS HERE ###
 
 def build_av_top(cifar_output):
@@ -287,7 +317,8 @@ def build_av_top(cifar_output):
             top of cifar_output
     '''
     ### TODO-8 STARTS HERE ###
-    raise NotImplementedError
+    av_output= Dense(2, activation='softmax')(cifar_output)
+    return av_output
     ### TODO-8 ENDS HERE ###
 
 ########## PART 3: QUESTIONS ##########
@@ -331,14 +362,28 @@ def generate_occlusions(image, occlusion_size):
         occlusion_size: the size of the square occlusion window
 
     Returns:
-        occ_batch: a numpy array of size
+        occ_batch        : a numpy array of size
             (((h / occlusion_size) * (w / occlusion_size)) x h x w x c). This is
             a batch of occluded images, each of which is an occlusion of the
             original image in a different position. The order of generated images
             matters, see the above specification!
     '''
     ### TODO-9 BEGINS HERE ###
-    raise NotImplementedError
+    
+    h,w,c = image.shape
+    os = occlusion_size
+    occ_batch = np.tile(image,(h/os)*(w/os)) #np.zeros(((h/occ_batch),(w/occ_batch),h,w,c))
+    os = occlusion_size
+    zMat = np.zeros((os,os))
+    for i in range(os/h):
+        for j in range(os/w):
+            single_occ = np.zeros((os,os))
+            top = i*os
+            bottom = (i+1)*os
+            left =  j*os
+            right = (j+1)*os
+            occ_batch[(os/h)*i+j, :os+i, j:os+j] = zMat
+    return occ_batch
     ### TODO-9 BEGINS HERE ###
 
 def find_worst_occlusion(images, model, y):
@@ -363,7 +408,16 @@ def find_worst_occlusion(images, model, y):
             the correct class label
     '''
     ### TODO-10 BEGINS HERE ###
-    raise NotImplementedError
+    occ_batch = generate_occlusions(image, occlusion_size)
+    preds,scores = generate_predictions(model, image_batch)
+    label = np.argmax(y)
+    preds_of_label = preds[label]
+    worst_idx = np.argmin(preds_of_label)
+    worst_occ_im = occ_batch[best_idx]
+    worst_occ_score = preds_of_label[best_idx]
+    
+    return worst_occ_im, worst_occ_score
+    
     ### TODO-10 ENDS HERE ###
 
 def generate_adversarial(image, get_gradients, alpha, num_steps):

@@ -108,8 +108,7 @@ def preprocess_dataset(x, image_size):
     ### TODO-2b BEGINS HERE ###
     n,_,_,_ = x.shape
     mean = np.mean(x,axis = (0,1,2))
-    print (mean.shape)
-    std_dec = np.std(x,axis = (0,1,2))
+    std_dev = np.std(x,axis = (0,1,2))
     x_p = np.zeros((n,image_size,image_size,3))
     for i,e in enumerate(x):
         x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))

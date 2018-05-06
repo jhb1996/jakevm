@@ -106,13 +106,13 @@ def preprocess_dataset(x, image_size):
             (n x image_size x image_size x 3)
     '''
     ### TODO-2b BEGINS HERE ###
-    print (type(x))
-    print (x.shape)
     n,_,_,_ = x.shape
+    mean = np.mean(x,axis = 3)
+    std_dec = np.std(x,axis = 3)
     x_p = np.zeros((n,image_size,image_size,3))
     for i,e in enumerate(x):
-        x_p[i]=skimage.transform.resize(e,(image_size, image_size, 3))
-        
+        x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))
+    x_p = (x_p-mean)/std_dev
     ### TODO-2b ENDS HERE ###
 
 def get_N_cifar_images(N, L, images, labels):

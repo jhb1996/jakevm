@@ -30,7 +30,7 @@ def labels_to_one_hot(labels, num_classes):
     n = len(labels)
     
     one_hot = np.zeros((n,num_classes))
-    one_hot[np.arange(num_classes), a] = 1
+    one_hot[np.arange(num_classes), labels] = 1
     print(labels)
     return one_hot
     ### TODO-1 ENDS HERE ###

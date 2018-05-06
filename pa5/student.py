@@ -31,7 +31,6 @@ def labels_to_one_hot(labels, num_classes):
     
     one_hot = np.zeros((n,num_classes))
     one_hot[np.arange(num_classes), labels] = 1
-    print(labels)
     return one_hot
     ### TODO-1 ENDS HERE ###
 
@@ -104,6 +103,7 @@ def preprocess_dataset(x, image_size):
             (n x image_size x image_size x 3)
     '''
     ### TODO-2b BEGINS HERE ###
+    n,_,_,_ = x.shape
     return x.reshape(n, image_size, image_size, 3)
     ### TODO-2b ENDS HERE ###
 

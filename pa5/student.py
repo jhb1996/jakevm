@@ -4,8 +4,7 @@ from keras.layers import GlobalAveragePooling2D
 from keras.models import Model
 from keras.layers import Dense
 from keras.layers import Dropout
-from sklearn.preprocessing import OneHotEncoder
-# from keras.layers import 
+#from sklearn.preprocessing import OneHotEncoder
 
 
 

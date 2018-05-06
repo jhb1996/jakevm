@@ -2,7 +2,6 @@ import numpy as np
 import skimage.transform
 from keras.layers import GlobalAveragePooling2D
 from keras.models import Model
-from keras.models import Predict
 from keras.layers import Dense
 from keras.layers import Dropout
 # from keras.layers import 

@@ -110,7 +110,7 @@ def preprocess_dataset(x, image_size):
     print (x.shape)
     n,_,_,_ = x.shape
     print (n)
-    return skimage.transform.resize(x,(n, image_size, 3))
+    return skimage.transform.resize(x,(n, image_size, image_size, 3))
     ### TODO-2b ENDS HERE ###
 
 def get_N_cifar_images(N, L, images, labels):

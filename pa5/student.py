@@ -110,8 +110,8 @@ def preprocess_dataset(x, image_size):
     mean = np.mean(x,axis = (0,1,2))
     std_dev = np.std(x,axis = (0,1,2))
     x_p = np.zeros((n,image_size,image_size,3))
-    for i,e in enumerate(x):
-        x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))#-mean/std_dev
+    # for i,e in enumerate(x):
+    #     x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))#-mean/std_dev
     return x_p
 
     ### TODO-2b ENDS HERE ###

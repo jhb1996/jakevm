@@ -30,10 +30,11 @@ def labels_to_one_hot(labels, num_classes):
     
     n = len(labels)
     
-    #one_hot = np.zeros((n,num_classes))
+    one_hot = np.zeros((n,num_classes))
     #one_hot[np.arange(num_classes), labels] = 1
-    one_hot,_,_ = OneHotEncoder(num_classes)
-    
+    #one_hot,_,_ = OneHotEncoder(num_classes)
+    for i,l in enumerate(labels):
+        one_hot[i,l]=1
     print ("one hot")
     print (one_hot[0])
     print (one_hot[1])

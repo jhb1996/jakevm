@@ -29,8 +29,16 @@ def labels_to_one_hot(labels, num_classes):
     
     n = len(labels)
     
-    one_hot = np.zeros((n,num_classes))
-    one_hot[np.arange(num_classes), labels] = 1
+    #one_hot = np.zeros((n,num_classes))
+    #one_hot[np.arange(num_classes), labels] = 1
+    one_hot,_,_ = sklearn.preprocessing.OneHotEncoder(num_classes)
+    
+    print ("one hot")
+    print (one_hot[0])
+    print (one_hot[1])
+    print (one_hot[2])
+    print ("-----------")
+    
     return one_hot
     ### TODO-1 ENDS HERE ###
 

@@ -68,7 +68,6 @@ def split_dataset(x, y, x_t, y_t, train_size, val_size, test_size):
     '''
     ### TODO-2a BEGINS HERE ###
     
-    #Q: how are the dims:train_size x image_size x image_size x 3
     
     # print (x.shape)
     x_train=x[:train_size]
@@ -135,15 +134,13 @@ def get_N_cifar_images(N, L, images, labels):
     images_type_L = images[bools]
     n_images_type_L = n_images_type_L[:N]
     return cifar_classes[L], n_images_type_L
-    
-    raise NotImplementedError
-    ### TODO-3 ENDS HERE ###
+        ### TODO-3 ENDS HERE ###
 
 ########## PART 1: QUESTIONS ##########
 # Enter your written answers in the space provided below!
 #
 # 1. Why is it important to have train, validation, and test splits?
-# Answer:
+# 
 #
 # 2. What was the original size of the CIFAR images before we resized them?
 # Answer:
@@ -179,8 +176,6 @@ def build_cifar_top(base_output):
     cifar_output = Dropout(.5, noise_shape=None, seed=None)(cifar_output)
     
     cifar_output= Dense(10, activation='softmax')(cifar_output)
-
-    raise NotImplementedError
     ### TODO-4 ENDS HERE ###
     return cifar_output
 
@@ -253,13 +248,15 @@ def generate_predictions(model, image_batch):
 # 3. How does the loss function being used relate to negative log likelihood
 #    discussed in class?
 # Answer:
+#TODO lookup catagorical cross entropy and see how that relates
 #
 # 4. List the final training, validation, and test accuracies of your model.
 # Answer:
 #
 # 5. Suggest one change to the layers that we added that could result in
 #    a higher accuracy.
-# Answer:
+# Answer:Add more hidden units. In other words change cifar_output = Dense(256, activation='relu')(cifar_output)
+# to have a greater number than 256
 #
 #######################################
 

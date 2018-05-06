@@ -34,12 +34,6 @@ def labels_to_one_hot(labels, num_classes):
     #one_hot,_,_ = OneHotEncoder(num_classes)
     for i,l in enumerate(labels):
         one_hot[i,l]=1
-    print ("one hot")
-    print (one_hot[0])
-    print (one_hot[1])
-    print (one_hot[2])
-    print ("-----------")
-    
     return one_hot
     ### TODO-1 ENDS HERE ###
 
@@ -116,7 +110,7 @@ def preprocess_dataset(x, image_size):
     print (x.shape)
     n,_,_,_ = x.shape
     print (n)
-    return x.reshape(n, image_size, image_size, 3)
+    return skimage.transform.resize(x,(n, image_size, 3))
     ### TODO-2b ENDS HERE ###
 
 def get_N_cifar_images(N, L, images, labels):

@@ -4,6 +4,7 @@ from keras.layers import GlobalAveragePooling2D
 from keras.models import Model
 from keras.layers import Dense
 from keras.layers import Dropout
+from sklearn.preprocessing import OneHotEncoder
 # from keras.layers import 
 
 
@@ -31,7 +32,7 @@ def labels_to_one_hot(labels, num_classes):
     
     #one_hot = np.zeros((n,num_classes))
     #one_hot[np.arange(num_classes), labels] = 1
-    one_hot,_,_ = sklearn.preprocessing.OneHotEncoder(num_classes)
+    one_hot,_,_ = OneHotEncoder(num_classes)
     
     print ("one hot")
     print (one_hot[0])

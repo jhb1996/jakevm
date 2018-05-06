@@ -103,7 +103,10 @@ def preprocess_dataset(x, image_size):
             (n x image_size x image_size x 3)
     '''
     ### TODO-2b BEGINS HERE ###
+    print (type(x))
+    print (x.shape)
     n,_,_,_ = x.shape
+    print (n)
     return x.reshape(n, image_size, image_size, 3)
     ### TODO-2b ENDS HERE ###
 

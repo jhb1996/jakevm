@@ -109,7 +109,7 @@ def preprocess_dataset(x, image_size):
     print (type(x))
     print (x.shape)
     n,_,_,_ = x.shape
-    x_p = np.zeros(n,image_size,image_size,3)
+    x_p = np.zeros((n,image_size,image_size,3))
     for i,e in enumerate(x):
         x_p[i]=skimage.transform.resize(e,(image_size, image_size, 3))
         

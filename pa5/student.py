@@ -110,8 +110,8 @@ def preprocess_dataset(x, image_size):
     mean = np.mean(x,axis = (0,1,2))
     std_dev = np.std(x,axis = (0,1,2))
     x_p = np.zeros((n,image_size,image_size,3))
-    # for i,e in enumerate(x):
-    #     x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))#-mean/std_dev
+    for i,e in enumerate(x):
+        x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))#-mean/std_dev
     return x_p
 
     ### TODO-2b ENDS HERE ###
@@ -139,6 +139,8 @@ def get_N_cifar_images(N, L, images, labels):
     '''
     ### TODO-3 BEGINS HERE ###
     bools = np.argmax(labels)==L
+    print ("bools 0", bools[0])
+    print ("L", L, type(L))
     images_type_L = images[bools]
     n_images_type_L = n_images_type_L[:N]
     return cifar_classes[L], n_images_type_L

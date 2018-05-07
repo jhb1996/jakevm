@@ -138,7 +138,7 @@ def get_N_cifar_images(N, L, images, labels):
             height, width, and channels of images in the given dataset
     '''
     ### TODO-3 BEGINS HERE ###
-    bools = np.argmax(labels)==L
+    bools = np.argmax(labels,axis=1)==L
     print ("bools 0", bools[0])
     print ("L", L, type(L))
     images_type_L = images[bools]

@@ -145,8 +145,9 @@ def get_N_cifar_images(N, L, images, labels):
     #print ("images_type_L 0 =", images[0])
     ##print ("len(images_type_L) =", c)
     #print ("N = ", N)
-    assert(len(images_type_L)==N)
+    
     n_images_type_L = images_type_L[:N]
+    assert(len(n_images_type_L)==N)
     return cifar_classes[L], n_images_type_L
         ### TODO-3 ENDS HERE ###
 

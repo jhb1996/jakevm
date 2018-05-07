@@ -74,11 +74,11 @@ def split_dataset(x, y, x_t, y_t, train_size, val_size, test_size):
     x_train=x[:train_size]
     y_train=y[:train_size]
     
-    x_val=x[train_size:]
-    y_val=y[train_size:]
+    x_val=x[train_size:train_size+val_size]
+    y_val=y[train_size:train_size+val_size]
     
-    x_test=x_t[:test_size]
-    y_test=y_t[:test_size]
+    x_test=x_t[train_size+val_size:test_size]
+    y_test=y_t[train_size+val_size:test_size]
         
     return x_train, y_train, x_val, y_val, x_test, y_test
     ### TODO-2a ENDS HERE ###

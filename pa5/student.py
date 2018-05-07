@@ -142,7 +142,10 @@ def get_N_cifar_images(N, L, images, labels):
     print ("bools 0", bools[0])
     print ("L", L, type(L))
     images_type_L = images[bools]
-    n_images_type_L = n_images_type_L[:N]
+    print ("images_type_L 0 =", images[0])
+    print ("len(images_type_L) =", len(images_type_L))
+    print ("N = ", N)
+    n_images_type_L = images_type_L[:N]
     return cifar_classes[L], n_images_type_L
         ### TODO-3 ENDS HERE ###
 

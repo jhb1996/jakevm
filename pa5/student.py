@@ -467,6 +467,7 @@ def generate_adversarial(image, get_gradients, alpha, num_steps):
     '''
     ### TODO-11 BEGINS HERE ###
     for i in range (num_steps):
+        return 1
         
         
     ### TODO-11 ENDS HERE ###

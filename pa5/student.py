@@ -33,6 +33,7 @@ def labels_to_one_hot(labels, num_classes):
     #one_hot[np.arange(num_classes), labels] = 1
     #one_hot,_,_ = OneHotEncoder(num_classes)
     for i,l in enumerate(labels):
+        print (l)
         one_hot[i,l]=1
     return one_hot
     ### TODO-1 ENDS HERE ###
@@ -466,8 +467,11 @@ def generate_adversarial(image, get_gradients, alpha, num_steps):
             difference between the changed_image and the original image.
     '''
     ### TODO-11 BEGINS HERE ###
+    changed_image = np.copy(image)
     for i in range (num_steps):
-        return 1
-        
+       changed_image=alpha*get_gradients([changed_image])[0]
+    diff_image = np.norm(changed_image - image, axis=2)
+    print ("diff_image.shape =", diff_image.shape)
+    return image, diff_image 
         
     ### TODO-11 ENDS HERE ###

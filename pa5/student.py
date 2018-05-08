@@ -249,8 +249,8 @@ def generate_predictions(model, image_batch):
     predictions_mat = model.predict(image_batch)
     print ("predictions mat shape =",predictions_mat.shape)
     labels = np.argmax(predictions_mat, axis = 1)
-    scores = predictions_mat[labels]#may need to play with the allignments here
-    
+    scores = np.max(predictions_mat, axis = 1)#may need to play with the allignments here
+    #print ("scores shape", np.shape(scores))
     return labels, scores
     
     ### TODO-6 ENDS HERE ###

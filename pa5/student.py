@@ -155,7 +155,11 @@ def get_N_cifar_images(N, L, images, labels):
 # Enter your written answers in the space provided below!
 #
 # 1. Why is it important to have train, validation, and test splits?
-# 
+#   A:The training set is used to set weights within the model in order to get the model to "fit"
+#   the data. The validations set is used to tune the hyperparameters of a given model. The validation
+#   set is not trained on but the model which was trained on the training set is run on the validation
+#   set with different hyper parameter settings in order to figure out the best hyperparameters to use.
+#   The test set is then used to see how good the trained and tuned model is.
 #
 # 2. What was the original size of the CIFAR images before we resized them?
 # Answer:
@@ -241,7 +245,7 @@ def generate_predictions(model, image_batch):
             in the batch
     '''
     ### TODO-6 BEGINS HERE ###
-    preprocessed_images = preprocess_dataset(image_batch)
+    
     predictions_mat = model.predict(preprocessed_image)
     print ("predictions mat shape =",predictions_mat.shape)
     labels = np.argmax(predictions_mat, axis = 1)

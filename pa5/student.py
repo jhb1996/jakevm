@@ -308,13 +308,18 @@ def change_labels_av(y_train, y_val, y_test):
             vs vehicles problem (r x 2)
     '''
     ### TODO-7 BEGINS HERE ###
-    cifar_classes = ['airplane', 'automobile', 'bird', 'cat',
-            'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    av_classes = ['animal', 'vehicle']
+    # cifar_classes = ['airplane', 'automobile', 'bird', 'cat',
+            # 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+    # av_classes = ['animal', 'vehicle']
     #d = {0:1,1:1,2:0,3:0,4:0,5:0,6:0,7:0,8:1,9:1}
-    y_train_av = np.dot(y_train, np.array([1,1,0,0,0,0,0,0,1,1]))
-    y_val_av = np.dot(y_val, np.array([1,1,0,0,0,0,0,0,1,1]))
-    y_test_av = np.dot(y_test, np.array([1,1,0,0,0,0,0,0,1,1]))
+    y_train_sing = np.dot(y_train, np.array([1,1,0,0,0,0,0,0,1,1]))
+    y_val_sing = np.dot(y_val, np.array([1,1,0,0,0,0,0,0,1,1]))
+    y_test_sing = np.dot(y_test, np.array([1,1,0,0,0,0,0,0,1,1]))
+    
+    y_train_av = labels_to_one_hot(y_train_sing, 2)
+    y_val_av = labels_to_one_hot(y_val_sing, 2)
+    y_test_av = labels_to_one_hot(y_test_sing, 2)
+    
     return y_train_av, y_val_av, y_test_av 
     ### TODO-7 ENDS HERE ###
 
@@ -461,5 +466,7 @@ def generate_adversarial(image, get_gradients, alpha, num_steps):
             difference between the changed_image and the original image.
     '''
     ### TODO-11 BEGINS HERE ###
-    raise NotImplementedError
+    for i in range (num_steps):
+        
+        
     ### TODO-11 ENDS HERE ###

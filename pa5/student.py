@@ -33,7 +33,7 @@ def labels_to_one_hot(labels, num_classes):
     #one_hot[np.arange(num_classes), labels] = 1
     #one_hot,_,_ = OneHotEncoder(num_classes)
     for i,l in enumerate(labels):
-        print (l)
+        l = int(l)
         one_hot[i,l]=1
     return one_hot
     ### TODO-1 ENDS HERE ###

@@ -30,8 +30,6 @@ def labels_to_one_hot(labels, num_classes):
     n = len(labels)
     
     one_hot = np.zeros((n,num_classes))
-    #one_hot[np.arange(num_classes), labels] = 1
-    #one_hot,_,_ = OneHotEncoder(num_classes)
     for i,l in enumerate(labels):
         l = int(l)
         one_hot[i,l]=1
@@ -70,16 +68,16 @@ def split_dataset(x, y, x_t, y_t, train_size, val_size, test_size):
     '''
     ### TODO-2a BEGINS HERE ###
     
-    
-    # print (x.shape)
     x_train=x[:train_size]
     y_train=y[:train_size]
     
     x_val=x[train_size:train_size+val_size]
     y_val=y[train_size:train_size+val_size]
     
-    x_test=x_t[train_size+val_size:train_size+val_size+test_size]
-    y_test=y_t[train_size+val_size:train_size+val_size+test_size]
+    x_test=x_t[:test_size]
+    y_test=y_t[:test_size]
+
+    print (x_test.shape)
         
     return x_train, y_train, x_val, y_val, x_test, y_test
     ### TODO-2a ENDS HERE ###
@@ -108,12 +106,12 @@ def preprocess_dataset(x, image_size):
     '''
     ### TODO-2b BEGINS HERE ###
     n,_,_,_ = x.shape
-    mean = np.mean(x,axis = (0,1,2))
-    std_dev = np.std(x,axis = (0,1,2))
     x_p = np.zeros((n,image_size,image_size,3))
     for i,e in enumerate(x):
-        x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))-mean/std_dev
-    return x_p
+        x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))
+    mean = np.mean(x_p,axis = (0,1,2))
+    std_dev = np.std(x_p,axis = (0,1,2))
+    return (x_p-mean)/std_dev
 
     ### TODO-2b ENDS HERE ###
 
@@ -140,13 +138,7 @@ def get_N_cifar_images(N, L, images, labels):
     '''
     ### TODO-3 BEGINS HERE ###
     bools = np.argmax(labels,axis=1)==L
-    #print ("bools 0", bools[0])
-    #print ("L", L, type(L))
     images_type_L = images[bools]
-    #print ("images_type_L 0 =", images[0])
-    ##print ("len(images_type_L) =", c)
-    #print ("N = ", N)
-    
     n_images_type_L = images_type_L[:N]
     assert(len(n_images_type_L)==N)
     return cifar_classes[L], n_images_type_L
@@ -192,9 +184,7 @@ def build_cifar_top(base_output):
     cifar_output = GlobalAveragePooling2D()(base_output)
     ### TODO-4 BEGINS HERE ###
     cifar_output = Dense(256, activation='relu')(cifar_output)
-    
     cifar_output = Dropout(.5, noise_shape=None, seed=None)(cifar_output)
-    
     cifar_output= Dense(10, activation='softmax')(cifar_output)
     ### TODO-4 ENDS HERE ###
     return cifar_output
@@ -250,7 +240,6 @@ def generate_predictions(model, image_batch):
     predictions_mat = model.predict(image_batch)
     labels = np.argmax(predictions_mat, axis = 1)
     scores = np.max(predictions_mat, axis = 1)#may need to play with the allignments here
-    #print ("scores shape", np.shape(scores))
     return labels, scores
     
     ### TODO-6 ENDS HERE ###
@@ -308,10 +297,6 @@ def change_labels_av(y_train, y_val, y_test):
             vs vehicles problem (r x 2)
     '''
     ### TODO-7 BEGINS HERE ###
-    # cifar_classes = ['airplane', 'automobile', 'bird', 'cat',
-            # 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    # av_classes = ['animal', 'vehicle']
-    #d = {0:1,1:1,2:0,3:0,4:0,5:0,6:0,7:0,8:1,9:1}
     y_train_sing = np.dot(y_train, np.array([1,1,0,0,0,0,0,0,1,1]))
     y_val_sing = np.dot(y_val, np.array([1,1,0,0,0,0,0,0,1,1]))
     y_test_sing = np.dot(y_test, np.array([1,1,0,0,0,0,0,0,1,1]))
@@ -355,7 +340,7 @@ def build_av_top(cifar_output):
 #
 # 3. How many trainable parameters does av_model contain?
 #    Briefly explain how you arrived at this number.
-# Answer:
+# Answer:256
 #
 #######################################
 
@@ -432,33 +417,12 @@ def find_worst_occlusion(images, model, y):
     ### TODO-10 BEGINS HERE ###
     # occ_batch = generate_occlusions(image, occlusion_size)
     predictions_mat = model.predict(images)
-
-    # preds,scores = generate_predictions(model, images)
-    # print preds
-    # print scores
-    # label = np.argmax(y)
-    # print (label)
-    # bools_of_label = (preds == label)
-    # print (bools_of_label)
-    # scores_of_label = scores[bools_of_label]
-    # preds_of_label = preds[bools_of_label]
-    # images_of_label = images[bools_of_label]
-    # worst_idx = np.argmin(scores_of_label)
-    # worst_occ_im = images_of_label[worst_idx]
-    # worst_occ_score = scores_of_label
-
     label = np.argmax(y)
-
     preds_of_label = predictions_mat[label]
-
     worst_idx = np.argmin(preds_of_label)
-
     worst_occ_im = images[worst_idx]
-
     worst_occ_score = preds_of_label[worst_idx]
-    #
     return worst_occ_im, worst_occ_score
-    
     ### TODO-10 ENDS HERE ###
 
 def generate_adversarial(image, get_gradients, alpha, num_steps):
@@ -487,12 +451,10 @@ def generate_adversarial(image, get_gradients, alpha, num_steps):
     '''
     ### TODO-11 BEGINS HERE ###
     changed_image = np.copy(image)
-    #scores, grad = get_gradients([changed_image[np.newaxis,:,:]])
     h,w,c = changed_image.shape
     for i in range (num_steps):
         scores, grad = get_gradients([changed_image.reshape(1,h,w,c)])
         changed_image=changed_image+alpha*grad
     diff_image = np.linalg.norm(changed_image.reshape(h,w,c) - image, axis=2)
     return changed_image.reshape(h,w,c), diff_image.reshape(h,w) 
-        
     ### TODO-11 ENDS HERE ###

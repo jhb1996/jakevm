@@ -37,6 +37,7 @@ def test_split_dataset():
 	assert y_val.shape == (val_size,10)
 	assert x_test.shape == (test_size,16,16,3)
 	assert y_test.shape == (test_size,10)
+    print ("test is running")
 
 @skip_not_implemented
 def test_preprocess_dataset():

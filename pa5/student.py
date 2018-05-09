@@ -112,7 +112,7 @@ def preprocess_dataset(x, image_size):
     std_dev = np.std(x,axis = (0,1,2))
     x_p = np.zeros((n,image_size,image_size,3))
     for i,e in enumerate(x):
-        x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))#-mean/std_dev
+        x_p[i]=(skimage.transform.resize(e,(image_size, image_size, 3)))-mean/std_dev
     return x_p
 
     ### TODO-2b ENDS HERE ###
@@ -248,7 +248,6 @@ def generate_predictions(model, image_batch):
     ### TODO-6 BEGINS HERE ###
     
     predictions_mat = model.predict(image_batch)
-    print ("predictions mat shape =",predictions_mat.shape)
     labels = np.argmax(predictions_mat, axis = 1)
     scores = np.max(predictions_mat, axis = 1)#may need to play with the allignments here
     #print ("scores shape", np.shape(scores))
@@ -394,18 +393,19 @@ def generate_occlusions(image, occlusion_size):
     
     h,w,c = image.shape
     os = occlusion_size
-    occ_batch = np.tile(image,(h/os)*(w/os)) #np.zeros(((h/occ_batch),(w/occ_batch),h,w,c))
+    occ_batch = np.tile(image,((h/os)*(w/os),1,1,1)) #np.zeros(((h/occ_batch),(w/occ_batch),h,w,c))
     os = occlusion_size
-    zMat = np.zeros((os,os))
-    for i in range(os/h):
-        for j in range(os/w):
-            single_occ = np.zeros((os,os))
+    zMat = np.zeros((os,os,3))
+    for i in range(h/os):
+        for j in range(w/os):
             top = i*os
             bottom = (i+1)*os
             left =  j*os
             right = (j+1)*os
-            occ_batch[(os/h)*i+j, :os+i, j:os+j] = zMat
+            occ_batch[(h/os)*i+j, top:bottom, left:right, :] = zMat[:,:]
     return occ_batch
+
+
     ### TODO-9 BEGINS HERE ###
 
 def find_worst_occlusion(images, model, y):
@@ -430,14 +430,33 @@ def find_worst_occlusion(images, model, y):
             the correct class label
     '''
     ### TODO-10 BEGINS HERE ###
-    occ_batch = generate_occlusions(image, occlusion_size)
-    preds,scores = generate_predictions(model, image_batch)
+    # occ_batch = generate_occlusions(image, occlusion_size)
+    predictions_mat = model.predict(images)
+
+    # preds,scores = generate_predictions(model, images)
+    # print preds
+    # print scores
+    # label = np.argmax(y)
+    # print (label)
+    # bools_of_label = (preds == label)
+    # print (bools_of_label)
+    # scores_of_label = scores[bools_of_label]
+    # preds_of_label = preds[bools_of_label]
+    # images_of_label = images[bools_of_label]
+    # worst_idx = np.argmin(scores_of_label)
+    # worst_occ_im = images_of_label[worst_idx]
+    # worst_occ_score = scores_of_label
+
     label = np.argmax(y)
-    preds_of_label = preds[label]
+
+    preds_of_label = predictions_mat[label]
+
     worst_idx = np.argmin(preds_of_label)
-    worst_occ_im = occ_batch[best_idx]
-    worst_occ_score = preds_of_label[best_idx]
-    
+
+    worst_occ_im = images[worst_idx]
+
+    worst_occ_score = preds_of_label[worst_idx]
+    #
     return worst_occ_im, worst_occ_score
     
     ### TODO-10 ENDS HERE ###
@@ -468,10 +487,12 @@ def generate_adversarial(image, get_gradients, alpha, num_steps):
     '''
     ### TODO-11 BEGINS HERE ###
     changed_image = np.copy(image)
+    #scores, grad = get_gradients([changed_image[np.newaxis,:,:]])
+    h,w,c = changed_image.shape
     for i in range (num_steps):
-       changed_image=alpha*get_gradients([changed_image])[0]
-    diff_image = np.norm(changed_image - image, axis=2)
-    print ("diff_image.shape =", diff_image.shape)
-    return image, diff_image 
+        scores, grad = get_gradients([changed_image.reshape(1,h,w,c)])
+        changed_image=changed_image+alpha*grad
+    diff_image = np.linalg.norm(changed_image.reshape(h,w,c) - image, axis=2)
+    return changed_image.reshape(h,w,c), diff_image.reshape(h,w) 
         
     ### TODO-11 ENDS HERE ###

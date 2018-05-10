@@ -157,6 +157,7 @@ def get_N_cifar_images(N, L, images, labels):
 # 2. What was the original size of the CIFAR images before we resized them?
 # Answer:
 #
+#
 #######################################
 
 def build_cifar_top(base_output):
@@ -241,17 +242,18 @@ def generate_predictions(model, image_batch):
     labels = np.argmax(predictions_mat, axis = 1)
     scores = np.max(predictions_mat, axis = 1)#may need to play with the allignments here
     return labels, scores
-    
     ### TODO-6 ENDS HERE ###
 
 ########## PART 2: QUESTIONS ##########
 # Enter your written answers in the space provided below!
 #
 # 1. What is an 'epoch'?
-# Answer:
+# Answer: An epoch is one complete pass through all of the training data, in which
+# all examples in the training set are used once for a forward pass and a backpropagation
 #
 # 2. What is meant by 'batch size'?
-# Answer:
+# Answer:A batch size is the number of training examples (in this cases images) which are
+# used to perform one forward pass and one backpropagation
 #
 # 3. How does the loss function being used relate to negative log likelihood
 #    discussed in class?
@@ -336,11 +338,16 @@ def build_av_top(cifar_output):
 #
 # 2. What would happen if less than 10% of our training examples
 #    belonged to the animal class?
-# Answer:
-#
+# Answer: The machine learning network would not learn the features of animals
+# as well as it learned the features of vehicles which would create a bias towards
+# the vehicle class.
+# source:https://pdfs.semanticscholar.org/a0d8/6c44f2843a483dfffbfc03dda230bbaad4cc.pdf
+# 
 # 3. How many trainable parameters does av_model contain?
 #    Briefly explain how you arrived at this number.
-# Answer:256
+# Answer: 512: The penultimate layer has 256 outputs. The final softmax layer must
+# take each of these inputs and use them to generate a probability for each of our
+# two classes. This means we have 256 parameters per output ie. 512 parameters.
 #
 #######################################
 
